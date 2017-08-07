@@ -417,7 +417,8 @@ textarea:-webkit-autofill {
     height: 60px;
 }
 
-.form-control {
+
+/* .form-control {
     background-color: #FFFFFF;
     background-image: none;
     border: 1px solid !important;
@@ -426,7 +427,7 @@ textarea:-webkit-autofill {
     color: #C7D5E0 !important;
     font-size: 13px !important;
     height: 31px !important;
-}
+} */
 
 .form-update {
     background-color: #FFFFFF;
@@ -815,9 +816,10 @@ img.ikon {
     width: 100%;
 }
 
-input[type=text] {
+
+/* input[type=text] {
     color: #fff;
-}
+} */
 
 .search-menu {
     border-radius: 4px;
@@ -2109,7 +2111,7 @@ img.sidebar-icon {
 }
 
 .nest .title-alt h6 {
-    color: #9EA7B3;
+    color: #00C1DE;
     float: left;
     font-family: 'Open Sans', serif;
     font-size: 14px;

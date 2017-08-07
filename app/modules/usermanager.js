@@ -138,7 +138,7 @@ define('modules/usermanager', ['utils/ajaxUtil', 'utils/common'], function(ajaxU
                     _self.datas = respons.list;
                     _self.viewModuls = _self.datas;
                     _self._constructTable();
-                    _self._constructTypeaHead();
+                    // _self._constructTypeaHead();
                     $('.left').removeClass('loading-light');
                 }
             });
@@ -146,38 +146,19 @@ define('modules/usermanager', ['utils/ajaxUtil', 'utils/common'], function(ajaxU
         _constructTable: function() {
             var _self = this;
             var html = '';
-            html += '<div id="admTableHeader" class="col-md-12 clear-padding-left clear-padding-right">';
-            html += '<table class="table table-striped table-hover">';
-            html += '<thead>';
-            html += '<tr>';
-            html += '<th style="width:5%;"><input id="chkAll" type="checkbox"></th>';
-            html += '<th style="width:25%;">单位名称</th>';
-            html += '<th style="width:20%;">单位IP地址</th>';
-            html += '<th style="width:25%;">单位地址</th>';
-            html += '<th style="width:25%;">备注</th>';
-            html += '</tr>';
-            html += '</thead>';
-            html += '</table>';
-            html += '</div>';
-            html += '<div id="admTable" class="col-md-12 clear-padding-left clear-padding-right">';
-            html += '<table class="table table-striped table-hover">';
-            html += '<tbody>';
             $.each(_self.viewModuls, function(key, val) {
                 html += '<tr index="' + key + '">';
-                html += '<td style="width:5%;"><input type="checkbox"></td>';
-                html += '<td style="width:25%;">' + val.name + '</td>';
-                html += '<td style="width:20%;">' + val.ip + '</td>';
-                html += '<td style="width:25%;">' + val.address + '</td>';
-                html += '<td style="width:25%;">' + val.description + '</td>';
+                html += '<td><input type="checkbox"></td>';
+                html += '<td>' + val.name + '</td>';
+                html += '<td>' + val.ip + '</td>';
+                html += '<td>' + val.address + '</td>';
+                html += '<td>' + val.description + '</td>';
                 html += '</tr>';
             });
-            html += '</tbody>';
-            html += '</table>';
-            html += '</div>';
-
-            $('#table-container').html(html);
+            $('.tableContent').html(html);
+            $('.footable-res').footable();
             $('#admTable').css('max-height', document.body.clientHeight - $('.navbar-dark').innerHeight() - $('.header').outerHeight(true) - $('#admTableHeader').outerHeight(true) - 24);
-            _self._initTableScrollBar('#admTable', 'outside');
+            // _self._initTableScrollBar('#admTable', 'outside');
             $('#chkAll').attr('checked', false);
 
             //handel events

@@ -1,0 +1,21 @@
+.noradius {
+    border-radius: 0px;
+}
+
+.btn-blue {
+    color: #fff;
+    font-size: 12px;
+    padding: 2px 10px;
+    border: 1px solid #00c1de;
+    border-radius: 0px !important;
+    background-color: #00c1de;
+}
+
+.btn-blue:hover,
+.btn-blue:focus,
+.btn-blue:active,
+.btn-blue.active {
+    color: #fff !important;
+    background-color: #31b0d5 !important;
+    border-color: #31b0d5!important;
+}
