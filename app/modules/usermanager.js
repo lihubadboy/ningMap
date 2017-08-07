@@ -162,7 +162,7 @@ define('modules/usermanager', ['utils/ajaxUtil', 'utils/common'], function(ajaxU
             $('#chkAll').attr('checked', false);
 
             //handel events
-            $('.table > tbody > tr').on('click', function(e) {
+            $('.footable  > tbody > tr').on('click', function(e) {
                 if (e.target.tagName == 'INPUT') return -1;
                 if ($(this).hasClass('select')) {
                     $(this).removeClass('select') && _self._hideDetialPanel();
@@ -424,9 +424,8 @@ define('modules/usermanager', ['utils/ajaxUtil', 'utils/common'], function(ajaxU
         },
         _showDetialPanel: function() {
             var _self = this;
-            $('.left').removeClass('col-md-12').addClass('col-md-6');
-            $('.right').removeClass('col-md-0').addClass('col-md-6');
-            // $('.right').css('opacity', 1);
+            $('.title-alt').hide();
+            $('.body-nest').hide();
         },
         _hideDetialPanel: function() {
             var _self = this;
