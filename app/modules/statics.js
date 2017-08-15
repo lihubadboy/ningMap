@@ -18,11 +18,13 @@
             //   _self._getAuthorInfo();
             // }
             _self._setDefaultOptions();
-            _self._setMainContentHeight();
+            // _self._setMainContentHeight();
             _self.mapChart = echarts.init(document.getElementById("mapDiv"));
-            // _self.pieChart = echarts.init(document.getElementById("piechart"));
+            _self.pieChart = echarts.init(document.getElementById("piechart"));
+            _self.barChart = echarts.init(document.getElementById("echarts-bar-chart"));
+            _self.lineChart = echarts.init(document.getElementById("echarts-line-chart"));
             _self._switching();
-            _self._requestDatas('heatmap');
+            _self._requestDatas('pointmap');
             _self._logout();
         },
         _getAuthorInfo: function() {
@@ -52,15 +54,18 @@
         },
         _requestDatas: function(id) {
             var _self = this;
-            $('#table-container').empty();
             $('.left').addClass('loading-light');
             _self.ajaxUtil.query(_self.options.OprUrls.calculator.staticUrl, '1=1', function(respons) {
                 if (respons.result) {
                     _self.datas = respons.data;
                     _self._requireStaticDatas(id);
-                    // _self._constructPieChart();
-                    // _self._convertData(_self.datas, id);
-                    // _self._constructTable();
+                    _self._constructPieChart();
+                    _self._constructBarChart();
+                    _self._constructLineChart();
+                    _self._convertData(_self.datas, id);
+                    _self._constructTable();
+                    $('.footable-res').footable();
+                    $('.tfooter').removeClass('loading-light');
                 } else {
                     _self._raiseMessage('获取用量数失败！');
                 }
@@ -549,38 +554,20 @@
             var _self = this;
             _self.res = [];
             _self.pieres = [];
+            _self.barX = [];
+            _self.barY = [];
             var totalNum = 0;
             $.each(datas, function(key, val) {
                 totalNum += val.count;
-                //map chart
-                // if (!id || id == 'staticmap') {
-                //   val.longitude && _self.res.push({
-                //         name: val.name,
-                //         value: [val.longitude, val.latitude, val.count]
-                //   });
-                //     _self.mapChart.setOption({
-                //       series: [{
-                //         name: '访问量',
-                //         data: _self.res
-                //       }]
-                //     });
-                //     if (key == datas.length - 1) {
-                //       _self.res_top3 = _self.res.sort(function(a, b) {
-                //         return b.value[2] - a.value[2];
-                //       }).slice(0, 3);
-                //       _self.mapChart.setOption({
-                //         series: [{
-                //           name: 'Top 3',
-                //           data: _self.res_top3
-                //         }]
-                //       });
-                //     }
-                // }
                 //pie chart
                 _self.pieres.push({
                     name: (val.name ? val.name : '未知'),
                     value: val.count
                 });
+                if (val.name) {
+                    _self.barX.push(val.name ? val.name : '未知');
+                    _self.barY.push(val.count);
+                }
                 _self.pielegends.push(val.name);
             });
             $('.total-num').html('总访问量：' + totalNum);
@@ -593,16 +580,26 @@
                     data: _self.pieres
                 }]
             });
+            _self.barChart.setOption({
+                xAxis: [{
+                    type: 'category',
+                    data: _self.barX
+                }],
+                series: [{
+                    name: '访问来源',
+                    data: _self.barY
+                }]
+            });
         },
         _constructPieChart: function() {
             var _self = this;
             var option = {
-                title: {
-                    text: '区划APP访问来源',
-                    subtext: '中国地震局地球物理研究所© 公益服务',
-                    sublink: 'http://www.cea-igp.ac.cn/',
-                    x: 'center'
-                },
+                // title: {
+                //     text: '区划APP访问来源',
+                //     subtext: '中国地震局地球物理研究所© 公益服务',
+                //     sublink: 'http://www.cea-igp.ac.cn/',
+                //     x: 'left'
+                // },
                 tooltip: {
                     trigger: 'item',
                     formatter: "{a} <br/>{b} : {c} ({d}%)"
@@ -627,36 +624,109 @@
             };
             _self.pieChart.setOption(option, true);
         },
+        _constructBarChart: function() {
+            var _self = this;
+            var baroption = {
+                // title: {
+                //     text: '区划APP访问来源',
+                //     subtext: '中国地震局地球物理研究所© 公益服务',
+                //     sublink: 'http://www.cea-igp.ac.cn/',
+                //     x: 'left'
+                // },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['访问量']
+                },
+                grid: {
+                    x: 30,
+                    x2: 40,
+                    y2: 24
+                },
+                calculable: true,
+                xAxis: [{
+                    type: 'category',
+                    data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                }],
+                yAxis: [{
+                    type: 'value'
+                }],
+                series: [{
+                    name: '访问量',
+                    type: 'bar',
+                    data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+                    markPoint: {
+                        data: [
+                            { type: 'max', name: '最大值' },
+                            { type: 'min', name: '最小值' }
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            { type: 'average', name: '平均值' }
+                        ]
+                    }
+                }]
+            };
+            _self.barChart.setOption(baroption, true);
+        },
+        _constructLineChart: function() {
+            var _self = this;
+            var lineoption = {
+                // title: {
+                //     text: '近几月App访问量变化'
+                // },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['最高气温']
+                },
+                grid: {
+                    x: 40,
+                    x2: 40,
+                    y2: 24
+                },
+                calculable: true,
+                xAxis: [{
+                    type: 'category',
+                    boundaryGap: false,
+                    data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月']
+                }],
+                yAxis: [{
+                    type: 'value',
+                }],
+                series: [{
+                    name: '访问量',
+                    type: 'line',
+                    center: [120, 80],
+                    data: [1123, 1145, 1534, 1314, 1246, 1378, 1098],
+                    markPoint: {
+                        data: [
+                            { type: 'max', name: '最大值' },
+                            { type: 'min', name: '最小值' }
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            { type: 'average', name: '平均值' }
+                        ]
+                    }
+                }]
+            };
+            _self.lineChart.setOption(lineoption, true);
+        },
         _constructTable: function() {
             var _self = this;
             var html = '';
-            html += '<div id="admTableHeader" class="col-md-12 clear-padding-left clear-padding-right">';
-            html += '<table class="table table-striped table-hover">';
-            html += '<thead>';
-            html += '<tr>';
-            html += '<th style="width:65%;">单位名称</th>';
-            html += '<th style="width:35%;">访问量</th>';
-            html += '</tr>';
-            html += '</thead>';
-            html += '</table>';
-            html += '</div>';
-            html += '<div id="admTable" class="col-md-12 clear-padding-left clear-padding-right">';
-            html += '<table class="table table-striped table-hover">';
-            html += '<tbody>';
             $.each(_self.datas.sort(function(a, b) { return b.count - a.count; }), function(key, val) {
                 html += '<tr index="' + key + '">';
                 html += '<td style="width:65%;">' + (val.name ? val.name : '未知') + '</td>';
                 html += '<td style="width:35%;">' + val.count + '</td>';
                 html += '</tr>';
             });
-            html += '</tbody>';
-            html += '</table>';
-            html += '</div>';
-
-            $('#table').html(html);
-            $('#admTable').css('max-height', $('.right').innerHeight() / 2 - $('#admTableHeader').outerHeight(true));
-            _self._initTableScrollBar('#admTable');
-            $('.right').removeClass('loading-dark');
+            $('.tableContent').html(html);
         },
         _switching: function() {
             var _self = this;

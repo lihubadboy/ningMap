@@ -157,41 +157,22 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
         },
         _requestDatas: function() {
             var _self = this;
-            $('#table-container').empty();
-            $('.left').addClass('loading-light');
+            $('.tfooter').addClass('loading-light');
             _self.ajaxUtil.query(_self.options.OprUrls.zoningInfo.queryUrl, 'engine=null', function(respons) {
                 if (respons.result) {
                     _self.datas = respons.list;
                     _self.viewModuls = _self.datas;
                     _self._constructTable();
                     _self._constructBdMap();
-                    _self._constructTypeaHead();
-                    $('.left').removeClass('loading-light');
+                    $('.footable-res').footable();
+                    // _self._constructTypeaHead();
+                    $('.tfooter').removeClass('loading-light');
                 }
             }, 'cb49c793-2572-4687-8347-7a14e97c0848');
         },
         _constructTable: function() {
             var _self = this;
             var html = '';
-            html += '<div id="admTableHeader" class="col-md-12 clear-padding-left clear-padding-right">';
-            html += '<table class="table table-striped table-hover">';
-            html += '<thead>';
-            html += '<tr>';
-            html += '<th style="width:5%;"><input id="chkAll" type="checkbox"></th>';
-            html += '<th style="width:25%;">区域</th>';
-            html += '<th style="width:20%;">调查员</th>';
-            html += '<th style="width:10%;">经度</th>';
-            html += '<th style="width:10%;">纬度</th>';
-            html += '<th style="width:10%;">Tg</th>';
-            html += '<th style="width:10%;">PGA</th>';
-            html += '<th style="width:10%;">调查时间</th>';
-            html += '</tr>';
-            html += '</thead>';
-            html += '</table>';
-            html += '</div>';
-            html += '<div id="admTable" class="col-md-12 clear-padding-left clear-padding-right">';
-            html += '<table class="table table-striped table-hover">';
-            html += '<tbody>';
             $.each(_self.viewModuls, function(key, val) {
                 html += '<tr index="' + key + '">';
                 html += '<td style="width:5%;"><input type="checkbox"></td>';
@@ -204,31 +185,21 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
                 html += '<td style="width:10%;">' + (new Date(val.createTime)).Format('yyyy年MM月dd日') + '</td>';
                 html += '</tr>';
             });
-            html += '</tbody>';
-            html += '</table>';
-            html += '</div>';
-
-            $('#table-container').html(html);
-            $('#admTable').css('max-height', document.body.clientHeight - $('.navbar-dark').innerHeight() - $('.header').outerHeight(true) - $('#admTableHeader').outerHeight(true) - 24);
-            _self._initTableScrollBar('#admTable', 'outside');
+            $('.tableContent').html(html);
             $('#chkAll').attr('checked', false);
 
             //handel events
-            $('.table > tbody > tr').on('click', function(e) {
+            $('.footable > tbody > tr').on('click', function(e) {
                 if (e.target.tagName == 'INPUT') return -1;
-                if ($(this).hasClass('select')) {
-                    $(this).removeClass('select') && _self._hideDetialPanel();
-                    _self.selectData = null;
-                    return -1;
-                }
-                $('.table > tbody > tr').removeClass('select') && $(this).addClass('select');
                 _self.selectData = _self.viewModuls[parseInt($(this).attr('index'))];
                 _self._showDetialPanel();
                 _self._constructDetialInfo(_self.selectData);
                 setTimeout(function(e) {
                     _self._constructDetialMap(_self.selectData);
                 }, 300);
-                $('.right').removeClass('loading-dark');
+                $('.backBtn').on('click', function() {
+                    _self._hideDetialPanel();
+                })
             });
 
             //connect check for all
@@ -245,7 +216,7 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
         _constructDetialInfo: function(data) {
             var _self = this;
             var html = '';
-            $('.title').html(data.administRegion.address);
+            $('.projectTitle').html(data.administRegion.address);
 
             html += _self._constructInfoPanel_6('省', data.administRegion.province, 1);
             html += _self._constructInfoPanel_6('市', data.administRegion.city, 0);
@@ -260,7 +231,7 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
             _self._constructPeriodTable(data);
             _self._constructPHeightTable(peakData);
             _self._constructThumbs(data);
-            _self._initTableScrollBar('#detials', 'outside');
+            // _self._initTableScrollBar('#detials', 'outside');
         },
         _constructThumbs: function(data) {
             var _self = this;
@@ -279,9 +250,9 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
                 });
                 html += '</div>';
             }
-            $('#detial-tab3').html(html);
+            $('.attachments').html(html);
 
-            $('#detial-tab3 a').on('click', function(e) {
+            $('.attachments a').on('click', function(e) {
                 var selectUrl = $(this).children('img').attr('src');
                 var thtml = '';
                 thtml += '<div class="carousel-inner" role="listbox">';
@@ -305,20 +276,7 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
             var peakdata;
             var _self = this;
             var html = '';
-            html += '<p class="sub-title">地震动峰值加速度</p>';
             peakdata = _self.SeismogramUtil.peak(data.pga);
-            html += '<table class="table table-bordered table-hover" id="peakTable">';
-            html += '<thead>';
-            html += '<tr>';
-            html += '<th class="no-sorting"> </th>';
-            html += '<th class="no-sorting">I0</th>';
-            html += '<th class="no-sorting">I1</th>';
-            html += '<th class="no-sorting">Ⅱ</th>';
-            html += '<th class="no-sorting">Ⅲ</th>';
-            html += '<th class="no-sorting">Ⅳ</th>';
-            html += '</tr>';
-            html += '</thead>';
-            html += '<tbody>';
             $.each(peakdata, function(key, val) {
                 html += '<tr>';
                 html += '<td><strong>' + _self._getParmeterAlias(key) + '</strong></td>';
@@ -329,29 +287,14 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
                 html += '<td>' + val[4] + '</td>';
                 html += '</tr>';
             });
-            html += '</tbody>';
-            html += '</table>';
-            $('#detial-tab0').html(html);
+            $('.peakTable0').html(html);
             return peakdata;
         },
         _constructPeriodTable: function(data) {
             var peakdata;
             var _self = this;
             var html = '';
-            html += '<p class="sub-title">地震动加速度反应谱特征周期</p>';
             peakdata = _self.SeismogramUtil.period(data.tg);
-            html += '<table class="table table-bordered table-hover" id="peakTable">';
-            html += '<thead>';
-            html += '<tr>';
-            html += '<th class="no-sorting"> </th>';
-            html += '<th class="no-sorting">I0</th>';
-            html += '<th class="no-sorting">I1</th>';
-            html += '<th class="no-sorting">Ⅱ</th>';
-            html += '<th class="no-sorting">Ⅲ</th>';
-            html += '<th class="no-sorting">Ⅳ</th>';
-            html += '</tr>';
-            html += '</thead>';
-            html += '<tbody>';
             $.each(peakdata, function(key, val) {
                 html += '<tr>';
                 html += '<td><strong>' + _self._getParmeterAlias(key) + '</strong></td>';
@@ -362,29 +305,14 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
                 html += '<td>' + val[4] + '</td>';
                 html += '</tr>';
             });
-            html += '</tbody>';
-            html += '</table>';
-            $('#detial-tab1').html(html);
+            $('.peakTable1').html(html);
             return peakdata;
         },
         _constructPHeightTable: function(peakData) {
             var phdata;
             var _self = this;
             var html = '';
-            html += '<p class="sub-title">地震动加速度反应谱平台高度</p>';
             phdata = _self.SeismogramUtil.platformHeight(peakData);
-            html += '<table class="table table-bordered table-hover" id="peakTable">';
-            html += '<thead>';
-            html += '<tr>';
-            html += '<th class="no-sorting"> </th>';
-            html += '<th class="no-sorting">I0</th>';
-            html += '<th class="no-sorting">I1</th>';
-            html += '<th class="no-sorting">Ⅱ</th>';
-            html += '<th class="no-sorting">Ⅲ</th>';
-            html += '<th class="no-sorting">Ⅳ</th>';
-            html += '</tr>';
-            html += '</thead>';
-            html += '<tbody>';
             $.each(phdata, function(key, val) {
                 html += '<tr>';
                 html += '<td><strong>' + _self._getParmeterAlias(key) + '</strong></td>';
@@ -395,9 +323,7 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
                 html += '<td>' + val[4] + '</td>';
                 html += '</tr>';
             });
-            html += '</tbody>';
-            html += '</table>';
-            $('#detial-tab2').html(html);
+            $('.peakTable2').html(html);
             return phdata;
         },
         _constructInfoPanel_6: function(header, content, isleft) {
@@ -555,15 +481,15 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
         },
         _showDetialPanel: function() {
             var _self = this;
-            $('.left').removeClass('col-md-12').addClass('col-md-6');
-            $('.right').removeClass('col-md-0').addClass('col-md-6');
-            // $('.right').css('opacity', 1);
+            $('.title-alt').hide();
+            $('.departmentlist').hide();
+            $('#contentDetail').show();;
         },
         _hideDetialPanel: function() {
             var _self = this;
-            $('.left').removeClass('col-md-6').addClass('col-md-12');
-            $('.right').removeClass('col-md-6').addClass('col-md-0');
-            // $('.right').css('opacity', 0);
+            $('.title-alt').show();
+            $('.departmentlist').show();
+            $('#contentDetail').hide();
         },
         _switching: function() {
             var _self = this;
@@ -572,13 +498,16 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
                 $('.btn-switch > .btn').removeClass('select');
                 $(this).addClass('select');
                 if ($(this).attr('id') == 'list') {
-                    $('.opr1').removeClass('hide');
-                    $('.opr2').addClass('hide');
+                    $('.header').show();
+                    $('#table-container').show();
+                    $('.btn-typeswitch').hide();
+                    $('#map-container').hide();
                 } else {
-                    $('.opr1').addClass('hide');
-                    $('.opr2').removeClass('hide');
+                    $('.header').hide();
+                    $('#table-container').hide();
+                    $('.btn-typeswitch').show();
+                    $('#map-container').show();
                 }
-                $('.content .tab-pane').removeClass('active').removeClass('in') && $(($(this).attr('id') == 'list' ? '#table-container' : '#map-container')).addClass('active').addClass('in');
                 _self.map.centerAndZoom(_self.options.city, _self.options.zoomlevel);
             });
 

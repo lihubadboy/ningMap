@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>区划信息服务管理系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="assets/css/loader-style.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="assets/js/progress-bar/number-pb.css">
+    <style type="text/css">
+        canvas#canvas4 {
+            position: relative;
+            top: 20px;
+        }
+    </style>
+
+    <body>
+        <!-- TOP NAVBAR -->
+        <nav role="navigation" class="navbar navbar-static-top">
+            <div class="container-fluid">
+                <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
+                    <div class="navbar-title">
+                        <span class="navbar-brand-subtext">《中国地震动参数区划图》GB18306-2015</span>
+                        <span class="navbar-brand-text">信息管理服务系统</span>
+                    </div>
+                    <ul style="margin-right:25px;" class="nav navbar-nav navbar-right">
+                        <li>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <img alt="" class="admin-pic img-circle" src="http://api.randomuser.me/portraits/thumb/men/10.jpg"> 欢迎， 陈波
+                                <b class="caret"></b>
+                            </a>
+                            <ul style="margin-top:14px;" role="menu" class="dropdown-setting dropdown-menu">
+                                <li>
+                                    <a href="#">
+                                        <span class="entypo-user"></span> &#160;&#160;个人资料
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <span class="entypo-lifebuoy"></span> &#160;&#160;帮助
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="login.html">
+                                        <span class="entypo-logout"></span> &#160;&#160; 退出
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- /END OF TOP NAVBAR -->
+
+        <!-- SIDE MENU -->
+        <div id="skin-select">
+            <div id="logo">
+                <img alt="logo" src="images/logo1.png">
+                <img alt="logo" src="images/logo.png"></div>
+            <a id="toggle">
+                <span class="entypo-menu"></span>
+            </a>
+            <div class="skin-part">
+                <div id="tree-wrap">
+                    <div class="side-bar">
+                        <ul class="topnav menu-left-nest">
+                            <li>
+                                <a href="#" style="border-left:0px solid!important;" class="title-menu-left">
+                                    <span class="widget-menu"></span>
+                                    <i data-toggle="tooltip" class="entypo-cog pull-right config-wrap"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="tooltip-tip ajax-load" href="index.html" title="统计面板" style="background: #00C1DE;">
+                                    <i class="icon-graph-pie"></i>
+                                    <span>统计面板</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="tooltip-tip ajax-load" href="index.html" title="工程统计">
+                                    <i class="icon-graph-line"></i>
+                                    <span>工程统计</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="tooltip-tip ajax-load" href="index.html" title="区域统计">
+                                    <i class="icon-graph-bar"></i>
+                                    <span>区域统计</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="tooltip-tip ajax-load" href="index.html" title="用量统计">
+                                    <i class="icon-document"></i>
+                                    <span>用量统计</span>
+                                </a>
+                            </li>
+
+                        </ul>
+
+                        <ul class="topnav menu-left-nest">
+                            <li>
+                                <a href="#" style="border-left:0px solid!important;" class="title-menu-left">
+                                    <span class="design-kit"></span>
+                                    <i data-toggle="tooltip" class="entypo-cog pull-right config-wrap"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="tooltip-tip ajax-load" href="engineeringList.html" title="建设工程许可备案">
+                                    <i class="icon-window"></i>
+                                    <span>建设工程许可备案</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="tooltip-tip ajax-load" href="administrative.html" title="村镇地震区划管理">
+                                    <i class="icon-direction"></i>
+                                    <span>村镇地震区划管理</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="tooltip-tip ajax-load" href="http://www.gb18306.cn" title="Icons">
+                                    <i class="icon-preview"></i>
+                                    <span>地震区划参数查询</span>
+                                </a>
+                            </li>
+
+                        </ul>
+
+                        <ul id="menu-showhide" class="topnav menu-left-nest">
+                            <li>
+                                <a href="#" style="border-left:0px solid!important;" class="title-menu-left">
+                                    <span class="component"></span>
+                                    <i data-toggle="tooltip" class="entypo-cog pull-right config-wrap"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="tooltip-tip" href="userManager.html" title="单位管理">
+                                    <i class="icon-user"></i>
+                                    <span>单位管理</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="tooltip-tip" href="userManager.html" title="用户管理">
+                                    <i class="icon-warning"></i>
+                                    <span>声明</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="tooltip-tip" href="userManager.html" title="用户管理">
+                                    <i class="icon-phone"></i>
+                                    <span>联系我们</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <!-- END OF SIDE MENU -->
+
+        <!--  PAPER WRAP -->
+        <div class="wrap-fluid">
+            <div class="container-fluid paper-wrap bevel tlbr">
+                <div id="paper-middle">
+                    <div id="mapDiv"></div>
+                </div>
+
+                <!--  DEVICE MANAGER -->
+                <div class="content-wrap">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="profit" id="profitClose">
+                                <div class="headline ">
+                                    <h3>
+                                        <span>
+                                        <i class="maki-ferry"></i>
+                                        &#160;&#160;工程统计
+                                    </span>
+                                    </h3>
+                                    <div class="titleClose">
+                                        <a href="#profitClose" class="gone">
+                                            <span class="entypo-cancel"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="value">
+                                    <span class="pull-left">
+                                    <i class="entypo-clock clock-position"></i>
+                                </span>
+                                    <div id="getting-started">
+                                        <span>%M</span>
+                                        <span>%S</span>
+                                    </div>
+                                </div>
+
+                                <div class="progress-tinny">
+                                    <div style="width: 50%" class="bar"></div>
+                                </div>
+
+                                <div class="profit-line">
+                                    <i class="fa fa-caret-up fa-lg"></i> &#160;&#160; 50% &#160;From Last Hour
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="revenue" id="revenueClose">
+                                <div class="headline ">
+                                    <h3>
+                                        <span>
+                                        <i class="maki-aboveground-rail"></i>
+                                        &#160;&#160;区域统计
+                                    </span>
+                                    </h3>
+                                    <div class="titleClose">
+                                        <a href="#revenueClose" class="gone">
+                                            <span class="entypo-cancel"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="value">
+                                    <span class="pull-left">
+                                    <i class="entypo-gauge gauge-position"></i>
+                                </span>
+                                    <canvas id="canvas4" width="70" height="70"></canvas>
+                                    <i class="pull-right">/次</i>
+                                </div>
+                                <div class="progress-tinny">
+                                    <div style="width: 25%" class="bar"></div>
+                                </div>
+                                <div class="profit-line">
+                                    <i class="fa fa-caret-down fa-lg"></i> &#160;&#160;Rate : 20 km/Hour
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-3">
+
+                            <div class="order" id="orderClose">
+
+                                <div class="headline ">
+
+                                    <h3>
+
+                                        <span>
+
+                                        <i class="maki-airport"></i>
+                                        &#160;&#160;单位统计
+                                    </span>
+
+                                    </h3>
+
+                                    <div class="titleClose">
+
+                                        <a href="#orderClose" class="gone">
+
+                                            <span class="entypo-cancel"></span>
+
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="value">
+
+                                    <span>
+                                    <i class="fa fa-plane fa-2x"></i>
+
+                                </span>
+                                    <b id="speed"></b>
+                                    <b>Take Off</b>
+
+                                </div>
+
+                                <div class="progress-tinny">
+
+                                    <div style="width: 10%" class="bar"></div>
+
+                                </div>
+
+                                <div class="profit-line">
+
+                                    <i class="fa fa-caret-down fa-lg"></i> &#160;&#160;Rate : 20 Plane/Hour
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-3">
+
+                            <div class=" member" id="memberClose">
+
+                                <div class="headline ">
+
+                                    <h3>
+
+                                        <span>
+
+                                        <i class="fa fa-truck"></i>
+                                        &#160;&#160;访问量统计
+                                    </span>
+
+                                    </h3>
+
+                                    <div class="titleClose">
+
+                                        <a href="#memberClose" class="gone">
+
+                                            <span class="entypo-cancel"></span>
+
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="value">
+
+                                    <span>
+                                    <i class="maki-warehouse"></i>
+
+                                </span> 45
+                                    <b>Sent</b>
+
+                                </div>
+
+                                <div class="progress-tinny">
+
+                                    <div style="width: 50%" class="bar"></div>
+
+                                </div>
+
+                                <div class="profit-line">
+
+                                    <span class="entypo-down-circled"></span> &#160;50% From Last Month
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!--  / DEVICE MANAGER -->
+
+                <div class="content-wrap">
+
+                    <div class="row">
+
+                        <div class="col-lg-8">
+
+                            <div id="siteClose" class="nest">
+
+                                <div class="title-alt">
+
+                                    <h6>
+
+                                        <span class="fontawesome-truck"></span> &nbsp;Destination
+                                    </h6>
+
+                                    <div class="titleClose">
+
+                                        <a class="gone" href="#siteClose">
+
+                                            <span class="entypo-cancel"></span>
+
+                                        </a>
+
+                                    </div>
+
+                                    <div class="titleToggle">
+
+                                        <a class="nav-toggle-alt" href="#site">
+
+                                            <span class="entypo-up-open"></span>
+
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                                <div id="site" class="body-nest" style="min-height:296px;">
+
+                                    <div class="table-responsive">
+
+                                        <table class="table">
+
+                                            <thead>
+
+                                                <tr>
+
+                                                    <th></th>
+
+                                                    <th></th>
+
+                                                    <th></th>
+
+                                                </tr>
+
+                                            </thead>
+
+                                            <tbody>
+
+                                                <tr>
+
+                                                    <td class="armada-devider">
+
+                                                        <div class="armada">
+
+                                                            <span style="background:#65C3DF">
+
+                                                            <span class="maki-bus"></span> &nbsp;&nbsp;Trans Berlin
+                                                            </span>
+
+                                                            <p>
+
+                                                                <span class="entypo-gauge"></span> &nbsp;12 Km/
+                                                                <i>Hours</i>
+
+                                                            </p>
+
+                                                        </div>
+
+                                                    </td>
+
+                                                    <td class="driver-devider">
+
+                                                        <img class="armada-pic img-circle" alt="" src="http://api.randomuser.me/portraits/thumb/men/14.jpg">
+
+                                                        <h3>Mark Zukenbeirg</h3>
+
+                                                        <br>
+
+                                                        <p>Driver</p>
+
+                                                    </td>
+
+                                                    <td class="progress-devider">
+
+                                                        <section id="basic">
+
+                                                            <article>
+
+                                                                <div class="number-pb">
+
+                                                                    <div class="number-pb-shown"></div>
+
+                                                                    <div class="number-pb-num">0</div>
+
+                                                                </div>
+
+                                                            </article>
+
+                                                        </section>
+
+                                                        <span class="label pull-left">Berlin</span>
+
+                                                        <span class="label pull-right">Muchen</span>
+
+                                                    </td>
+
+                                                </tr>
+
+                                                <tr>
+
+                                                    <td class="armada-devider">
+
+                                                        <div class="armada">
+
+                                                            <span style="background:#45B6B0">
+
+                                                            <span class="fontawesome-plane"></span> &nbsp;&nbsp;Fly Airlines
+                                                            </span>
+
+                                                            <p>
+
+                                                                <span class="entypo-gauge"></span> &nbsp;600 Km/
+                                                                <i>Hours</i>
+
+                                                            </p>
+
+                                                        </div>
+
+                                                    </td>
+
+                                                    <td class="driver-devider">
+
+                                                        <img class="armada-pic img-circle" alt="" src="http://api.randomuser.me/portraits/thumb/men/38.jpg">
+
+                                                        <h3>Marko Freytag</h3>
+
+                                                        <br>
+
+                                                        <p>Pilot</p>
+
+                                                    </td>
+
+                                                    <td class="progress-devider">
+
+                                                        <section id="percentage">
+
+                                                            <article>
+
+                                                                <div class="number-pb">
+
+                                                                    <div class="number-pb-shown dream"></div>
+
+                                                                    <div class="number-pb-num">0%</div>
+
+                                                                </div>
+
+                                                            </article>
+
+                                                        </section>
+
+                                                        <span class="label pull-left">Berlin</span>
+
+                                                        <span class="label pull-right">London</span>
+
+                                                    </td>
+
+                                                </tr>
+
+                                                <tr>
+
+                                                    <td class="armada-devider">
+
+                                                        <div class="armada">
+
+                                                            <span style="background:#FF6B6B">
+
+                                                            <span class="maki-aboveground-rail"></span> &nbsp;&nbsp;Fazttrain
+                                                            </span>
+
+                                                            <p>
+
+                                                                <span class="entypo-gauge"></span> &nbsp;40 Km/
+                                                                <i>Hours</i>
+
+                                                            </p>
+
+                                                        </div>
+
+                                                    </td>
+
+                                                    <td class="driver-devider">
+
+                                                        <img class="armada-pic img-circle" alt="" src="http://api.randomuser.me/portraits/thumb/men/39.jpg">
+
+                                                        <h3>Dieter Gruenewald</h3>
+
+                                                        <br>
+
+                                                        <p>machinist</p>
+
+                                                    </td>
+
+                                                    <td class="progress-devider">
+
+                                                        <section id="step">
+
+                                                            <article>
+
+                                                                <div class="number-pb">
+
+                                                                    <div class="number-pb-shown sun"></div>
+
+                                                                    <div class="number-pb-num">0/0</div>
+
+                                                                </div>
+
+                                                            </article>
+
+                                                        </section>
+
+                                                        <span class="label pull-left">Berlin</span>
+
+                                                        <span class="label pull-right">Dortmund</span>
+
+                                                    </td>
+
+                                                </tr>
+
+                                            </tbody>
+
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-4">
+
+                            <div id="RealTimeClose" class="nest">
+
+                                <div class="title-alt">
+
+                                    <h6>
+
+                                        <span class="fontawesome-resize-horizontal"></span> &nbsp;Direction
+                                    </h6>
+
+                                    <div class="titleClose">
+
+                                        <a class="gone" href="#RealTimeClose">
+
+                                            <span class="entypo-cancel"></span>
+
+                                        </a>
+
+                                    </div>
+
+                                    <div class="titleToggle">
+
+                                        <a class="nav-toggle-alt" href="#RealTime">
+
+                                            <span class="entypo-up-open"></span>
+
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                                <div id="RealTime" style="min-height:296px;padding-top:20px;" class="body-nest">
+
+                                    <ul class="direction">
+
+                                        <li>
+
+                                            <span class="direction-icon maki-fuel" style="background:#FF6B6B"></span>
+
+                                            <h3>
+
+                                                <span>Gas Station</span>
+
+                                            </h3>
+
+                                            <p>
+                                                5 Km Foward&nbsp;&nbsp;
+                                                <i class="fa fa-arrow-circle-up"></i>
+
+                                            </p>
+
+                                            <p>
+                                                <i>Estimated time</i> :&nbsp;
+                                                <i class="fa fa-clock-o"></i> &nbsp;&nbsp;20 Min
+                                            </p>
+
+                                        </li>
+
+                                        <li class="divider"></li>
+
+                                        <li>
+
+                                            <span class="direction-icon maki-fast-food" style="background:#65C3DF"></span>
+
+                                            <h3>
+
+                                                <span>Restourant</span>
+
+                                            </h3>
+
+                                            <p>
+                                                1 Km Turn Left&nbsp;&nbsp;
+                                                <i class="fa fa-reply"></i>
+
+                                            </p>
+
+                                            <p>
+                                                <i>Estimated time</i> :&nbsp;
+                                                <i class="fa fa-clock-o"></i> &nbsp;&nbsp;20 Min
+                                            </p>
+
+                                        </li>
+
+                                        <li class="divider"></li>
+
+                                        <li>
+
+                                            <span class="direction-icon maki-giraffe" style="background:#45B6B0"></span>
+
+                                            <h3>
+
+                                                <span>Zoo</span>
+
+                                            </h3>
+
+                                            <p>
+                                                3 Km Turn Right &nbsp;&nbsp;
+                                                <i class="fa fa-share"></i>
+
+                                            </p>
+
+                                            <p>
+                                                <i>Estimated time</i> :&nbsp;
+                                                <i class="fa fa-clock-o"></i> &nbsp;&nbsp;20 Min
+                                            </p>
+
+                                        </li>
+
+                                        <li class="divider"></li>
+
+                                    </ul>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="content-wrap">
+
+                    <div class="row">
+
+                        <div class="col-lg-6">
+
+                            <div class="chart-wrap">
+
+                                <div class="chart-dash">
+
+                                    <!-- <div id="sparkline"></div>
+                            -->
+                                    <div id="placeholder" style="width:100%;height:200px;"></div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-lg-8">
+
+                                        <div class="speed">
+
+                                            <h2>Speed Avarage</h2>
+
+                                            <h1>
+                                                74
+                                                <span>Km / hours</span>
+
+                                            </h1>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-lg-4">
+
+                                        <div class="traffic">
+
+                                            <h2>Traffic per day</h2>
+
+                                            <h1>2.5874</h1>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-lg-4">
+
+                                        <div class="traffic-rates">
+
+                                            <h4>Traffic Rates</h4>
+
+                                            <h1>
+                                                76 %
+                                                <span>-1,2 %</span>
+
+                                            </h1>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-lg-4">
+
+                                        <div class="traffic-rates">
+
+                                            <h4>Traffic Rates</h4>
+
+                                            <h1>
+                                                25 %
+                                                <span>-1,8 %</span>
+
+                                            </h1>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-lg-4">
+
+                                        <div class="traffic-rates">
+
+                                            <h4>Traffic Rates</h4>
+
+                                            <h1>
+                                                83 %
+                                                <span>-1,9 %</span>
+
+                                            </h1>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-6">
+
+                            <div class="weather-wrap">
+
+                                <div class="row">
+
+                                    <div class="col-lg-12">
+
+                                        <div class="temperature">
+                                            <b>Monday</b> , 07:30 AM
+                                            <span>F</span>
+
+                                            <span>
+                                        <b>C</b>
+
+                                    </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-lg-4">
+
+                                        <div class="weather-icon">
+
+                                            <i class="wi-day-lightning"></i>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-lg-8">
+
+                                        <div class="weather-text">
+
+                                            <h2>
+                                                Berlin
+                                                <br>
+                                                <i>Day Lightning</i>
+
+                                            </h2>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-lg-12">
+
+                                        <div class="weather-text">
+
+                                            <h3>
+                                                <i class="wi-thermometer"></i> 18
+                                                <i class="wi-celcius"></i>
+
+                                            </h3>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="weather-dash">
+
+                                    <div class="row">
+
+                                        <div class="col-lg-2">
+
+                                            <div class="daily-weather">
+
+                                                <h2>Mon</h2>
+
+                                                <h3>
+                                                    85
+                                                    <span>
+                                                <i class="wi-fahrenheit"></i>
+
+                                            </span>
+
+                                                </h3>
+
+                                                <h4>
+
+                                                    <span>
+                                                <i class="wi-day-lightning"></i>
+
+                                            </span>
+
+                                                </h4>
+
+                                                <h5>
+                                                    15
+                                                    <i>km/h</i>
+
+                                                </h5>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-lg-2">
+
+                                            <div class="daily-weather">
+
+                                                <h2>Tue</h2>
+
+                                                <h3>
+                                                    81
+                                                    <span>
+                                                <i class="wi-fahrenheit"></i>
+
+                                            </span>
+
+                                                </h3>
+
+                                                <h4>
+                                                    <i class="wi-day-cloudy"></i>
+
+                                                </h4>
+
+                                                <h5>
+                                                    12
+                                                    <i>km/h</i>
+
+                                                </h5>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-lg-2">
+
+                                            <div class="daily-weather">
+
+                                                <h2>Wed</h2>
+
+                                                <h3>
+                                                    83
+                                                    <span>
+                                                <i class="wi-fahrenheit"></i>
+
+                                            </span>
+
+                                                </h3>
+
+                                                <h4>
+                                                    <i class="wi-rain-mix"></i>
+
+                                                </h4>
+
+                                                <h5>
+                                                    14
+                                                    <i>km/h</i>
+
+                                                </h5>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-lg-2">
+
+                                            <div class="daily-weather">
+
+                                                <h2>Thu</h2>
+
+                                                <h3>
+                                                    80
+                                                    <span>
+                                                <i class="wi-fahrenheit"></i>
+
+                                            </span>
+
+                                                </h3>
+
+                                                <h4>
+                                                    <i class="wi-day-sunny"></i>
+
+                                                </h4>
+
+                                                <h5>
+                                                    15
+                                                    <i>km/h</i>
+
+                                                </h5>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-lg-2">
+
+                                            <div class="daily-weather">
+
+                                                <h2>Fri</h2>
+
+                                                <h3>
+                                                    79
+                                                    <span>
+                                                <i class="wi-fahrenheit"></i>
+
+                                            </span>
+
+                                                </h3>
+
+                                                <h4>
+                                                    <i class="wi-day-storm-showers"></i>
+
+                                                </h4>
+
+                                                <h5>
+                                                    11
+                                                    <i>km/h</i>
+
+                                                </h5>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-lg-2">
+
+                                            <div class="daily-weather">
+
+                                                <h2>Sat</h2>
+
+                                                <h3>
+                                                    82
+                                                    <span>
+                                                <i class="wi-fahrenheit"></i>
+
+                                            </span>
+
+                                                </h3>
+
+                                                <h4>
+                                                    <i class="wi-cloudy"></i>
+
+                                                </h4>
+
+                                                <h5>
+                                                    10
+                                                    <i>km/h</i>
+
+                                                </h5>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- /END OF CONTENT -->
+
+                    <!-- FOOTER -->
+                    <div class="footer-space"></div>
+                    <div id="footer">
+                        <div class="devider-footer-left"></div>
+                        <div class="time">
+                            <p id="spanDate">
+                                <p id="clock">
+                        </div>
+                        <div class="copyright">
+                            中国地震局地球物理研究所© 公益服务
+                            <a href="#">鼎越天恒（北京）技术有限公司</a> 技术支持
+                        </div>
+                        <div class="devider-footer"></div>
+                    </div>
+                    <!-- / END OF FOOTER -->
+                </div>
+
+            </div>
+
+        </div>
+
+        <!--  END OF PAPER WRAP -->
+
+        <!-- END OF RIGHT SLIDER CONTENT-->
+        <script type="text/javascript" src="assets/js/jquery.js"></script>
+        <script src="lib/jquery.json.min.js" type="text/javascript"></script>
+        <script src="assets/js/progress-bar/src/jquery.velocity.min.js"></script>
+        <script src="assets/js/progress-bar/number-pb.js"></script>
+        <script src="assets/js/progress-bar/progress-app.js"></script>
+        <!-- MAIN EFFECT -->
+        <script type="text/javascript" src="assets/js/bootstrap.js"></script>
+        <script type="text/javascript" src="assets/js/app.js"></script>
+
+
+        <script type="text/javascript" src="assets/js/skin-select/jquery.cookie.js"></script>
+        <script type="text/javascript" src="assets/js/skin-select/skin-select.js"></script>
+        <!-- GAGE -->
+        <script type="text/javascript" src="assets/js/chart/jquery.flot.js"></script>
+        <script type="text/javascript" src="assets/js/chart/jquery.flot.resize.js"></script>
+        <script type="text/javascript" src="assets/js/chart/realTime.js"></script>
+        <script type="text/javascript" src="assets/js/speed/canvasgauge-coustom.js"></script>
+        <script type="text/javascript" src="assets/js/countdown/jquery.countdown.js"></script>
+
+        <!-- echart -->
+        <script src="lib/echarts/echarts-all.js" type="text/javascript"></script>
+        <script src="lib/echarts/china.js" type="text/javascript"></script>
+        <!-- <script src="lib/bmap.min.js"></script> -->
+        <!-- main -->
+        <!-- <script type="text/javascript" src="assets/js/pace/pace.js"></script> -->
+        <script type="text/javascript" src="assets/js/gage/raphael.2.1.0.min.js"></script>
+        <!-- google API -->
+        <!-- <script src="http://maps.google.cn/maps/api/js?key=AIzaSyC1b7JqX2Jw9F6taBbwmvug8HlvDCYjMyA "></script> -->
+        <!-- Baidu API -->
+        <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=GGvhGfDF6GyuDoE1l2MFkzVC"></script>
+        <script type="text/javascript" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>
+        <script type="text/javascript" src="http://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js"></script>
+        <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+
+        <script src="lib/require.js" type="text/javascript"></script>
+        <script type="text/javascript" src="app/config/requireConfig.js"></script>
+        <script type="text/javascript" src="app/config/config.js"></script>
+
+        <script type="text/javascript">
+            require(['modules/statics'], function(statics) {
+                var statics = new statics(configOptions);
+            });
+        </script>
+
+
+        <script>
+            var gauge4 = new Gauge("canvas4", {
+                'mode': 'needle',
+                'range': {
+                    'min': 0,
+                    'max': 90
+                }
+            });
+            gauge4.draw(Math.floor(Math.random() * 90));
+            var run = setInterval(function() {
+                gauge4.draw(Math.floor(Math.random() * 90));
+            }, 3500);
+        </script>
+        <!-- google javascript -->
+        <!-- <script type="text/javascript">
+            $(window).on('load', function() {
+                var dom = document.getElementById('mapDiv');
+                var gmap = new google.maps.Map(dom, {
+                    center: {
+                        lat: 39.9388838,
+                        lng: 116.3974589
+                    },
+                    zoom: 10,
+                    heading: 90,
+                    clickableIcons: false,
+                    streetViewControl: true,
+                    rotateControl: true,
+                    scaleControl: false,
+                    zoomControl: true,
+                    fullScreenControl: false,
+                    mapTypeControl: true,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+            });
+        </script> -->
+
+        <!-- 百度 javascript -->
+        <script type="text/javascript">
+            // 百度地图API功能
+            var map = new BMap.Map("mapDiv"); // 创建Map实例
+            map.centerAndZoom(new BMap.Point(116.404, 39.915), 10); // 初始化地图,设置中心点坐标和地图级别
+            map.addControl(new BMap.MapTypeControl()); //添加地图类型控件
+            map.setCurrentCity("北京"); // 设置地图显示的城市 此项是必须设置的
+            map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+        </script>
+
+
+        <script type="text/javascript">
+            var output, started, duration, desired;
+            // Constants
+            duration = 5000;
+            desired = '50';
+            // Initial setup
+            output = $('#speed');
+            started = new Date().getTime();
+            // Animate!
+            animationTimer = setInterval(function() {
+                // If the value is what we want, stop animating
+                // or if the duration has been exceeded, stop animating
+                if (output.text().trim() === desired || new Date().getTime() - started > duration) {
+                    console.log('animating');
+                    // Generate a random string to use for the next animation step
+                    output.text('' + Math.floor(Math.random() * 60));
+                } else {
+                    console.log('animating');
+                    // Generate a random string to use for the next animation step
+                    output.text('' + Math.floor(Math.random() * 120));
+                }
+
+            }, 5000);
+        </script>
+
+        <script type="text/javascript">
+            $('#getting-started').countdown('2015/01/01', function(event) {
+                $(this).html(event.strftime(
+                    '<span>%M</span>' + '<span class="start-min">:</span>' + '<span class="start-min">%S</span>'));
+
+            });
+        </script>
+
+    </body>
+
+</html>

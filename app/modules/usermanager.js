@@ -14,7 +14,7 @@ define('modules/usermanager', ['utils/ajaxUtil', 'utils/common'], function(ajaxU
             //     _self._getAuthorInfo();
             // }
             _self._setDefaultOptions();
-            _self._setMainContentHeight();
+            // _self._setMainContentHeight();
             _self._requestDatas();
             _self._bureauManager();
             _self._delete();
@@ -132,20 +132,32 @@ define('modules/usermanager', ['utils/ajaxUtil', 'utils/common'], function(ajaxU
         _requestDatas: function() {
             var _self = this;
             $('#table-container').empty();
-            $('.left').addClass('loading-light');
+            $('.tfooter').addClass('loading-light');
             _self.ajaxUtil.query(_self.options.OprUrls.bureau.queryUrl, '1=1', function(respons) {
                 if (respons.result) {
                     _self.datas = respons.list;
                     _self.viewModuls = _self.datas;
                     _self._constructTable();
                     // _self._constructTypeaHead();
-                    $('.left').removeClass('loading-light');
+                    $('.tfooter').removeClass('loading-light');
                 }
             });
         },
         _constructTable: function() {
             var _self = this;
             var html = '';
+            $('#admTable').empty();
+            html += '<table class="table-striped footable-res footable metro-blue" data-page-size="10">';
+            html += '<thead>';
+            html += '<tr>';
+            html += '<th class="footable-sortable"><input id="chkAll" type="checkbox"></th>';
+            html += '<th>单位名称</th>';
+            html += '<th>单位IP地址</th>';
+            html += '<th>单位地址</th>';
+            html += '<th>备注</th>';
+            html += '</tr>';
+            html += '</thead>';
+            html += '<tbody class="tableContent">';
             $.each(_self.viewModuls, function(key, val) {
                 html += '<tr index="' + key + '">';
                 html += '<td><input type="checkbox"></td>';
@@ -155,28 +167,35 @@ define('modules/usermanager', ['utils/ajaxUtil', 'utils/common'], function(ajaxU
                 html += '<td>' + val.description + '</td>';
                 html += '</tr>';
             });
-            $('.tableContent').html(html);
+            html += '</tbody>';
+
+            html += '<tfoot>';
+            html += '<tr>';
+            html += '<td colspan="5">';
+            html += '<div class="pagination pagination-centered pull-right"></div>';
+            html += '</td>';
+            html += '</tr>';
+            html += '</tfoot>';
+            html += '</table>';
+
+            $('#admTable').html(html);
             $('.footable-res').footable();
-            $('#admTable').css('max-height', document.body.clientHeight - $('.navbar-dark').innerHeight() - $('.header').outerHeight(true) - $('#admTableHeader').outerHeight(true) - 24);
+            $('#admTable').css('max-height', '600px');
             // _self._initTableScrollBar('#admTable', 'outside');
             $('#chkAll').attr('checked', false);
 
             //handel events
             $('.footable  > tbody > tr').on('click', function(e) {
                 if (e.target.tagName == 'INPUT') return -1;
-                if ($(this).hasClass('select')) {
-                    $(this).removeClass('select') && _self._hideDetialPanel();
-                    _self.selectData = null;
-                    return -1;
-                }
-                $('.table > tbody > tr').removeClass('select') && $(this).addClass('select');
                 _self.selectData = _self.viewModuls[parseInt($(this).attr('index'))];
                 _self._showDetialPanel();
                 _self._constructDetialInfo(_self.selectData);
                 setTimeout(function(e) {
                     _self._constructDetialMap(_self.selectData);
                 }, 300);
-                $('.right').removeClass('loading-dark');
+                $('.backBtn').on('click', function() {
+                    _self._hideDetialPanel();
+                })
             });
 
             //connect check for all
@@ -193,67 +212,41 @@ define('modules/usermanager', ['utils/ajaxUtil', 'utils/common'], function(ajaxU
         _constructDetialInfo: function(data) {
             var _self = this;
             var html = '';
-            $('.title').html(data.name);
+            $('.userTitle').html(data.name);
 
-            html += _self._constructInfoPanel_6('IP', data.ip, 1);
-            html += _self._constructInfoPanel_6('地址', data.address, 0);
-            html += _self._constructInfoPanel_12('备注', data.description);
+            html += '<div class="col-md-6 info clear-padding-left">';
+            html += '<p class="high-light">IP<strong class="pull-right">' + data.ip + '</strong></p>';
+            html += '</div>';
+            html += '<div class="col-md-6 info clear-padding-right">';
+            html += ' <p class="high-light">地址<strong class="pull-right">' + data.address + '</strong></p>';
+            html += '</div>';
+            html += '<div class="col-md-12 info clear-padding-left clear-padding-right">';
+            html += '<p class="high-light">备注<strong class="pull-right">' + data.description + '</strong></p>';
+            html += ' </div>';
 
             $('#detial-info').html(html);
             _self._constructUserTable(data.id);
-            _self._initTableScrollBar('#detials', 'outside');
+            // _self._initTableScrollBar('#detials', 'outside');
         },
         _constructUserTable: function(bureauid) {
             var _self = this;
             var html = '';
-            html += '<ul class="list-inline">';
-            html += '<li><p class="sub-title">单位用户列表</p></li>';
-            html += '<li class="pull-right">';
-            html += '<button id="btnDeleteUser" class="btn btn-default btn-xs btn-custom" type="submit"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 删除用户</button>';
-            html += '</li>';
-            html += '<li class="pull-right">';
-            html += '<button id="btnUpdateUser" class="btn btn-default btn-xs btn-custom" type="submit"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> 编辑用户</button>';
-            html += '</li>';
-            html += '<li class="pull-right">';
-            html += '<button id="btnAddUser" class="btn btn-default btn-xs btn-custom" type="submit"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 添加用户</button>';
-            html += '</li>';
-            html += '<li class="pull-right">';
-            html += '<button id="btnImportUser" class="btn btn-default btn-xs btn-custom" type="submit"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> 导入用户</button>';
-            html += '</li>';
-            html += '<table class="table table-bordered table-hover" id="userTableHeader" style="margin-bottom: 0;border-bottom: 0;">';
-            html += '<thead>';
-            html += '<tr>';
-            html += '<th style="width:5%;"><input id="chkAllUsr" type="checkbox"></th>';
-            html += '<th style="width:15%;">用户名</th>';
-            html += '<th style="width:25%;">别名</th>';
-            html += '<th style="width:15%;">角色</th>';
-            html += '<th style="width:20%;">联系电话</th>';
-            html += '<th style="width:20%;">邮箱地址</th>';
-            html += '</tr>';
-            html += '</thead>';
-            html += '</table>';
-            html += '</div>';
-            html += '<div id="userTable">';
-            html += '<table class="table table-bordered table-hover">';
-            html += '<tbody>';
             _self.ajaxUtil.query(_self.options.OprUrls.user.queryUrl, "Regionalid='" + bureauid + "'", function(respons) {
                 if (respons.result && respons.list) {
                     $.each(respons.list, function(key, val) {
                         html += '<tr index="' + key + '">';
-                        html += '<td style="width:5%;"><input type="checkbox"></td>';
-                        html += '<td style="width:15%;">' + val.name + '</td>';
-                        html += '<td style="width:25%;">' + val.alias + '</td>';
-                        html += '<td style="width:15%;">' + (val.role ? val.role.name : '未知') + '</td>';
-                        html += '<td style="width:20%;">' + val.telephone + '</td>';
-                        html += '<td style="width:20%;">' + val.email + '</td>';
+                        html += '<td><input type="checkbox"></td>';
+                        html += '<td>' + val.name + '</td>';
+                        html += '<td>' + val.alias + '</td>';
+                        html += '<td>' + (val.role ? val.role.name : '未知') + '</td>';
+                        html += '<td>' + val.telephone + '</td>';
+                        html += '<td>' + val.email + '</td>';
                         html += '</tr>';
                     });
                     _self.currentUsers = respons.list;
                 }
-                html += '</tbody>';
-                html += '</table>';
-                html += '</div>';
-                $('#detial-tab2').html(html);
+                $('.userContent').html(html);
+                $('.footable-user-res').footable();
                 $('#chkAllUsr').attr('checked', false);
 
                 $('#chkAllUsr').on('click', function(event) {
@@ -268,20 +261,6 @@ define('modules/usermanager', ['utils/ajaxUtil', 'utils/common'], function(ajaxU
 
                 _self._userManager();
             });
-        },
-        _constructInfoPanel_6: function(header, content, isleft) {
-            var html = '';
-            html += (isleft ? '<div class="col-md-6 info clear-padding-left">' : '<div class="col-md-6 info clear-padding-right">');
-            html += '<p class="high-light">' + header + '<strong class="pull-right">' + content + '</strong></p>';
-            html += '</div>';
-            return html;
-        },
-        _constructInfoPanel_12: function(header, content) {
-            var html = '';
-            html += '<div class="col-md-12 info clear-padding-left clear-padding-right">';
-            html += '<p class="high-light">' + header + '<strong class="pull-right">' + content + '</strong></p>';
-            html += '</div>';
-            return html;
         },
         _constructTypeaHead: function() {
             var _self = this;
@@ -425,13 +404,14 @@ define('modules/usermanager', ['utils/ajaxUtil', 'utils/common'], function(ajaxU
         _showDetialPanel: function() {
             var _self = this;
             $('.title-alt').hide();
-            $('.body-nest').hide();
+            $('.departmentlist').hide();
+            $('#contentDetail').show();
         },
         _hideDetialPanel: function() {
             var _self = this;
-            $('.left').removeClass('col-md-6').addClass('col-md-12');
-            $('.right').removeClass('col-md-6').addClass('col-md-0');
-            // $('.right').css('opacity', 0);
+            $('.title-alt').show();
+            $('.departmentlist').show();
+            $('#contentDetail').hide();
         },
         _bureauManager: function() {
             var _self = this;
@@ -481,7 +461,6 @@ define('modules/usermanager', ['utils/ajaxUtil', 'utils/common'], function(ajaxU
                         if (respons.result) {
                             _self._raiseMessage(_self.isAddBureau ? '添加单位成功！' : '更新单位信息成功！');
                             _self._hideDetialPanel();
-                            _self.resize();
                             _self._requestDatas();
                         } else {
                             _self._raiseError(_self.isAddBureau ? '添加单位失败！' : '更新单位信息失败！');
@@ -616,7 +595,6 @@ define('modules/usermanager', ['utils/ajaxUtil', 'utils/common'], function(ajaxU
                     if (respons.result) {
                         _self._raiseMessage(_self.isUpdateUser ? '编辑用户成功！' : '添加用户成功！');
                         _self._constructUserTable(_self.selectData.id);
-                        _self._updateTableScrollBar('#detials');
                     } else {
                         _self._raiseError(_self.isUpdateUser ? '编辑用户失败！' : '添加用户失败！');
                     }
@@ -714,8 +692,6 @@ define('modules/usermanager', ['utils/ajaxUtil', 'utils/common'], function(ajaxU
                         _self.ajaxUtil.delete(_self.options.OprUrls.bureau.deleteUrl, deleteDatas, function(respons) {
                             if (respons.result) {
                                 $('#deleteContent').html('<span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span> 删除数据成功！');
-                                _self._hideDetialPanel();
-                                _self.resize();
                                 _self._requestDatas();
                             } else {
                                 $('#deleteContent').html('<span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> 删除数据失败！');
@@ -730,7 +706,6 @@ define('modules/usermanager', ['utils/ajaxUtil', 'utils/common'], function(ajaxU
                             if (respons.result) {
                                 $('#deleteContent').html('<span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span> 删除数据成功！');
                                 _self._hideDetialPanel();
-                                _self.resize();
                                 _self._requestDatas();
                             } else {
                                 $('#deleteContent').html('<span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> 删除数据失败！');
@@ -764,8 +739,6 @@ define('modules/usermanager', ['utils/ajaxUtil', 'utils/common'], function(ajaxU
         _refresh: function() {
             var _self = this;
             $('#btnRefresh').on('click', function(e) {
-                _self._hideDetialPanel();
-                _self.resize();
                 _self._requestDatas();
             });
         },

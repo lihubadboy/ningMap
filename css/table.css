@@ -1,7 +1,62 @@
+#list,
+#pointmap {
+    border-radius: 200px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#map,
+#heatmap {
+    border-radius: 200px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.select {
+    background-color: #00c1de !important;
+}
+
+.btn-group {
+    margin: 8px;
+}
+
 #FootableClose input {
     border-radius: 0px;
 }
 
 #FootableClose .header {
     margin: 0px;
+}
+
+.loading-light {
+    background: #fff url(../images/loading.gif?v=3.01) no-repeat center center !important;
+    background-size: 30px 30px;
+    z-index: -1;
+    position: inherit !important;
+    min-height: 45px !important;
+}
+
+#map-container {
+    height: 618px !important;
+}
+
+.edetailtable {
+    margin-bottom: 20px;
+}
+
+.edetailtable .body-nest {
+    padding: 0px;
+}
+
+
+/* .chartTitle {
+    background-color: #65C3DF !important;
+    color: #fff !important;
+    font-weight: normal !important;
+    padding: 3px 7px!important;
+} */
+
+.notifications.top-right {
+    right: 100px !important;
+    top: 138px !important;
 }

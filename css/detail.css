@@ -1,0 +1,60 @@
+#contentDetail .ibox {
+    margin: 30px auto 0px;
+}
+
+.ibox .ibox-content {
+    padding: 15px 20px 20px 20px;
+}
+
+.ibox-content h2 {
+    font-size: 24px;
+    font-weight: 100;
+}
+
+#detial-map {
+    margin: 10px 0px;
+    height: 320px;
+    background-color: #fff;
+}
+
+#detial-info {
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.info {
+    vertical-align: middle;
+    margin-top: 20px;
+}
+
+.info>p {
+    background-color: #f9f9f9;
+    margin: auto;
+    font-size: 16px;
+    line-height: 35px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.info>p>strong {
+    color: #5a5a5a;
+}
+
+.high-light {
+    color: #00C1DE;
+}
+
+.sub-title {
+    color: #00C1DE;
+    border-left: 4px solid #00C1DE;
+    font-size: 18px;
+    padding-left: 12px;
+}
+
+.clear-padding-left {
+    padding-left: 0px !important;
+}
+
+.clear-padding-right {
+    padding-right: 0px !important;
+}
