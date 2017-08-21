@@ -27,7 +27,8 @@ var configOptions = {
         },
         "zoningInfo": {
             "queryUrl": baseOprUrl + "/seismicrecord/query",
-            "deleteUrl": baseOprUrl + "/seismicrecord/delete"
+            "deleteUrl": baseOprUrl + "/seismicrecord/delete",
+            "searchUrl": baseOprUrl + "/seismicrecord/search",
         },
         "calculator": {
             "queryUrl": baseOprUrl + "/calculator/query",
@@ -49,6 +50,5 @@ var configOptions = {
             "updateUrl": baseOprUrl + "/local/bureau/update"
         }
     },
-    "enumDatas": {
-    }
+    "enumDatas": {}
 };

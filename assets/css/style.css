@@ -2785,6 +2785,15 @@ img.sidebar-icon {
     height: 40px;
 }
 
+.revenue .value b {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: normal;
+    letter-spacing: 0;
+    margin: 0 0 0 10px;
+    text-transform: uppercase;
+}
+
 .revenue .headline h3 {
     font-size: 15px;
     font-weight: normal;
@@ -2817,7 +2826,7 @@ img.sidebar-icon {
     font-size: 25px;
     margin-right: 5px;
     position: relative;
-    top: -20px;
+    top: 0px;
 }
 
 .revenue .profit-line {

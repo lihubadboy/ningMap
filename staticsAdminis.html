@@ -23,6 +23,7 @@
     <link href="assets/js/footable/css/footable-demos.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="assets/js/dataTable/lib/jquery.dataTables/css/DT_bootstrap.css">
     <link rel="stylesheet" href="assets/js/dataTable/css/datatables.responsive.css">
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" />
 
 </head>
 
@@ -30,7 +31,7 @@
 
 <body>
     <!-- TOP NAVBAR -->
-    <nav role="navigation" class="navbar navbar-static-top">
+    <nav role="navigation" class="navbar navbar-static-top" style="margin-left: 240px;">
         <div class="container-fluid">
             <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
                 <div class="navbar-title">
@@ -40,7 +41,7 @@
                 <ul style="margin-right:25px;" class="nav navbar-nav navbar-right">
                     <li>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <img alt="" class="admin-pic img-circle" src="http://api.randomuser.me/portraits/thumb/men/10.jpg"> 欢迎， 陈波 <b class="caret"></b>
+                            <img alt="" class="admin-pic img-circle" src="images/user.png"> 欢迎， 陈波 <b class="caret"></b>
                         </a>
                         <ul style="margin-top:14px;" role="menu" class="dropdown-setting dropdown-menu">
                             <li>
@@ -78,7 +79,7 @@
         <div class="skin-part">
             <div id="tree-wrap">
                 <div class="side-bar">
-                    <ul class="topnav menu-left-nest">
+                    <ul class="topnav menu-left-nest" style="margin: 10px;">
                         <li>
                             <a href="#" style="border-left:0px solid!important;" class="title-menu-left">
                                 <span class="widget-menu"></span> <i data-toggle="tooltip" class="entypo-cog pull-right config-wrap"></i>
@@ -110,7 +111,7 @@
 
                     </ul>
 
-                    <ul class="topnav menu-left-nest">
+                    <ul class="topnav menu-left-nest" style="margin: 10px;">
                         <li>
                             <a href="#" style="border-left:0px solid!important;" class="title-menu-left">
                                 <span class="design-kit"></span>
@@ -138,7 +139,7 @@
 
                     </ul>
 
-                    <ul id="menu-showhide" class="topnav menu-left-nest">
+                    <ul class="topnav menu-left-nest" style="margin: 10px;">
                         <li>
                             <a href="#" style="border-left:0px solid!important;" class="title-menu-left">
                                 <span class="component"></span>
@@ -178,7 +179,7 @@
 
     <!--  PAPER WRAP -->
 
-    <div class="wrap-fluid">
+    <div class="wrap-fluid" style="width: auto; margin-left: 250px;">
         <div class="container-fluid paper-wrap bevel tlbr">
             <div class="content-wrap">
                 <div class="row">
@@ -186,7 +187,7 @@
                         <div id="RealTimeClose" class="nest">
                             <div class="title-alt">
                                 <h6 class="chartTitle">
-                                    <i class="icon-graph-line"></i> &nbsp;用量统计
+                                    <i class="icon-graph-line"></i> &nbsp;区划统计
                                 </h6>
                                 <div class="titleClose">
                                     <a class="gone" href="#RealTimeClose">
@@ -211,7 +212,7 @@
                                         <div style="width: 50%" class="bar"></div>
                                     </div>
                                     <div class="profit-line">
-                                        <span class="entypo-down-circled"></span> &nbsp;50% From Last Month
+                                        <span class="entypo-star"></span> &nbsp;村镇地震区划管理记录总数
                                     </div>
 
                                 </div>
@@ -222,7 +223,7 @@
                         <div id="RealTimeClose" class="nest">
                             <div class="title-alt">
                                 <h6 class="chartTitle">
-                                    <i class="icon-graph-line"></i> &nbsp;近期APP访问量变化趋势
+                                    <i class="icon-graph-line"></i> &nbsp;近期村镇区划管理记录变化趋势
                                 </h6>
                                 <div class="titleClose">
                                     <a class="gone" href="#RealTimeClose">
@@ -243,102 +244,7 @@
                     </div>
                 </div>
             </div>
-            <div class="content-wrap">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div id="siteClose" class="nest">
-                            <div class="title-alt">
-                                <h6 class="chartTitle">
-                                    <span class="fontawesome-list-ul"></span> &nbsp;区划APP访问来源(列表)
-                                </h6>
-                                <div class="titleClose">
-                                    <a class="gone" href="#siteClose">
-                                        <span class="entypo-cancel"></span>
-                                    </a>
-                                </div>
-                                <div class="titleToggle">
-                                    <a class="nav-toggle-alt" href="#site">
-                                        <span class="entypo-up-open"></span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div id="site" class="body-nest" style="min-height:345px;">
-                                <table id="table-container" class="table-striped footable-res footable metro-blue" data-page-size="5">
-                                    <thead>
-                                        <tr>
-                                            <th>单位名称</th>
-                                            <th>访问量</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="tableContent">
-                                    </tbody>
-                                    <tfoot class="tfooter loading-light">
-                                        <tr>
-                                            <td colspan="2" style="height:34px;">
-                                                <div class="pagination pagination-centered pull-right"></div>
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-lg-6">
-                        <div id="RealTimeClose" class="nest">
-                            <div class="title-alt">
-                                <h6 class="chartTitle">
-                                    <i class="icon-graph-pie"></i></span> &nbsp;区划APP访问来源(饼状图)
-                                </h6>
-                                <div class="titleClose">
-                                    <a class="gone" href="#RealTimeClose">
-                                        <span class="entypo-cancel"></span>
-                                    </a>
-                                </div>
-                                <div class="titleToggle">
-                                    <a class="nav-toggle-alt" href="#RealTime">
-                                        <span class="entypo-up-open"></span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div id="RealTime" style="min-height:345px;padding-top:20px;" class="body-nest">
-                                <div id="piechart" style="height:310px;">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="content-wrap">
-                <div class="row">
-
-                    <div class="col-lg-12">
-                        <div id="RealTimeClose" class="nest">
-                            <div class="title-alt">
-                                <h6 class="chartTitle">
-                                    <i class="icon-graph-bar"></i> &nbsp;区划APP访问来源(柱状图)
-                                </h6>
-                                <div class="titleClose">
-                                    <a class="gone" href="#RealTimeClose">
-                                        <span class="entypo-cancel"></span>
-                                    </a>
-                                </div>
-                                <div class="titleToggle">
-                                    <a class="nav-toggle-alt" href="#RealTime">
-                                        <span class="entypo-up-open"></span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div id="RealTime" style="min-height:345px;padding-top:20px;" class="body-nest">
-                                <div id="echarts-bar-chart" style="height:310px;">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="content-wrap">
                 <div class="row">
@@ -346,8 +252,7 @@
                         <div class="nest" id="FootableClose">
                             <div class="title-alt">
                                 <div class="btn-group typeswitch" role="group">
-                                    <button id="pointmap" type="button" class="btn btn-default select"><span class="glyphicon glyphicon-registration-mark" aria-hidden="true"></span> 点云图</button>
-                                    <button id="staticmap" type="button" class="btn btn-default "><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> 聚合图</button>
+                                    <button id="pointmap" type="button" class="btn btn-default select"><span class="glyphicon glyphicon-registration-mark" aria-hidden="true"></span> 分布图</button>
                                     <button id="heatmap" type="button" class="btn btn-default"><span class="glyphicon glyphicon-registration-mark" aria-hidden="true"></span> 热点图</button>
                                 </div>
                             </div>
@@ -412,7 +317,7 @@
     <script type="text/javascript" src="app/config/config.js"></script>
 
     <script type="text/javascript">
-        require(['modules/statics'], function(statics) {
+        require(['modules/staticsAdminis'], function(statics) {
             var statics = new statics(configOptions);
         });
     </script>
