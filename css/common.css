@@ -19,3 +19,8 @@
     background-color: #31b0d5 !important;
     border-color: #31b0d5!important;
 }
+
+.bigSizeNum {
+    font-weight: normal;
+    font-size: 60px !important;
+}

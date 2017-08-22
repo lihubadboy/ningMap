@@ -12,6 +12,7 @@ define('modules/main', ['utils/ajaxUtil', 'utils/common'], function(ajaxUtil, co
             if (_self.options.isLogin == true) {
                 _self._getAuthorInfo();
             }
+            _self._requsstStaticsDatas();
             _self._requestDatas();
             _self._constructLineChart();
             _self._logout();
@@ -35,6 +36,27 @@ define('modules/main', ['utils/ajaxUtil', 'utils/common'], function(ajaxUtil, co
             $("#logout").on("click", function() {
                 _self.common.deleteCookie(_self.options.authorInfoKey, "/");
                 window.location.href = "login.html";
+            });
+        },
+        _requsstStaticsDatas: function() {
+            var _self = this;
+            _self.ajaxUtil.statics(_self.options.OprUrls.statistics.allCountUrl, function(respons) {
+                if (respons) {
+                    var staticsData = respons;
+                    for (i = 0; i < staticsData.length; i++) {
+                        var perData = staticsData[i];
+                        if (perData.name == '访问总量') {
+                            $('#clickNum').html(perData.num);
+                        } else if (perData.name == '单位总量') {
+                            $('#departNum').html(perData.num);
+                        } else if (perData.name == '工程记录') {
+                            $('#engineerNum').html(perData.num);
+                        } else if (perData.name == '区划总量') {
+                            $('#localNum').html(perData.num);
+                        }
+
+                    }
+                }
             });
         },
         _requestDatas: function() {

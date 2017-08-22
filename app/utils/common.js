@@ -64,6 +64,15 @@ define('utils/common', [], function() {
                 return unescape(value);
             } else return "";
         },
+        quickQueryCust: function(evt) {
+            evt = (evt) ? evt : ((window.event) ? window.event : ""); //兼容IE和Firefox获得keyBoardEvent对象
+            var key = evt.keyCode ? evt.keyCode : evt.which; //兼容IE和Firefox获得keyBoardEvent对象的键值
+            if (key == 13) { //判断是否是回车事件。
+                //根据需要执行某种操作。
+                return true; //return false是为了停止表单提交，如果return true或者不写的话，表单照样是会提交的。
+            }
+            return false;
+        },
         deleteCookie: function(name, path) {
             var name = escape(name);
             var expires = new Date(0);
@@ -205,20 +214,20 @@ define('utils/common', [], function() {
                 return fmt;
             };
         },
-        transformData : function(attr){
+        transformData: function(attr) {
             var firstlevel = [];
-            for(var i=0;i<attr.length;i++){
-                for(var j=0;j<attr.length;j++){
-                    if(attr[i].id==attr[j].parentid){
-                        if(!attr[i].child) {
+            for (var i = 0; i < attr.length; i++) {
+                for (var j = 0; j < attr.length; j++) {
+                    if (attr[i].id == attr[j].parentid) {
+                        if (!attr[i].child) {
                             attr[i].child = [];
                         }
                         attr[i].child.push(attr[j]);
                     }
                 }
             }
-            for(var i=0;i<attr.length;i++){
-                if(attr[i].parentid==-1){
+            for (var i = 0; i < attr.length; i++) {
+                if (attr[i].parentid == -1) {
                     firstlevel.push(attr[i])
                 }
             }

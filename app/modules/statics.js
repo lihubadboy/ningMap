@@ -18,6 +18,7 @@
             //   _self._getAuthorInfo();
             // }
             _self._setDefaultOptions();
+            _self._requestStaticsDatas();
             // _self._setMainContentHeight();
             _self.mapChart = echarts.init(document.getElementById("mapDiv"));
             _self.pieChart = echarts.init(document.getElementById("piechart"));
@@ -46,6 +47,27 @@
             $("#logout").on("click", function() {
                 _self.common.deleteCookie(_self.options.authorInfoKey, "/");
                 window.location.href = "login.html";
+            });
+        },
+        _requestStaticsDatas: function() {
+            var _self = this;
+            _self.ajaxUtil.statics(_self.options.OprUrls.statistics.allCountUrl, function(respons) {
+                if (respons) {
+                    var staticsData = respons;
+                    for (i = 0; i < staticsData.length; i++) {
+                        var perData = staticsData[i];
+                        if (perData.name == '访问总量') {
+                            $('#clickNum').html(perData.num);
+                        } else if (perData.name == '单位总量') {
+                            $('#departNum').html(perData.num);
+                        } else if (perData.name == '工程记录') {
+                            $('#engineerNum').html(perData.num);
+                        } else if (perData.name == '区划总量') {
+                            $('#localNum').html(perData.num);
+                        }
+
+                    }
+                }
             });
         },
         _setDefaultOptions: function() {

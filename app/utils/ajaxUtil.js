@@ -13,6 +13,13 @@ define('utils/ajaxUtil', [], function() {
             if (userid) query.userid = userid;
             _self._ajaxPost(url, query, callback);
         },
+        statics: function(url, callback) {
+            var _self = this;
+            var query = {
+                q: '1=1'
+            };
+            _self._ajaxPost(url, query, callback);
+        },
         search: function(url, where, start, num, callback, userid) {
             var _self = this;
             var search = where == null ? '1=1' : where.trim();

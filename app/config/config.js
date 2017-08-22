@@ -30,6 +30,9 @@ var configOptions = {
             "deleteUrl": baseOprUrl + "/seismicrecord/delete",
             "searchUrl": baseOprUrl + "/seismicrecord/search",
         },
+        "statistics": {
+            "allCountUrl": baseOprUrl + "/statistics/allCount"
+        },
         "calculator": {
             "queryUrl": baseOprUrl + "/calculator/query",
             "staticUrl": baseOprUrl + "/calculator/statisticsBureau"
