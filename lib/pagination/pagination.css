@@ -1,0 +1,47 @@
+.pagination-container {
+    text-align: center;
+}
+
+.pagination-jq {
+    font-size: 80%;
+    /* margin: 1em auto; */
+    font: 14px/1.333 "\5FAE\8F6F\96C5\9ED1", "Hiragino Sans GB", arial, helvetica, clean;
+    /*text-align: right;*/
+    /*float: right;*/
+    padding: 0.5em;
+    display: inline-block;
+}
+
+.pagination-jq a {
+    text-decoration: none;
+    border: solid 1px #AAE;
+    color: #00C1DE;
+}
+
+.pagination-jq a:hover {
+    background: #00C1DE;
+    color: #fff;
+    border: solid 1px #AAE;
+}
+
+.pagination-jq a,
+.pagination-jq span {
+    display: block;
+    float: left;
+    padding: 0.3em 0.5em;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.pagination-jq .current {
+    background: #00C1DE;
+    color: #fff;
+    border: solid 1px #AAE;
+}
+
+.pagination-jq .current.prev,
+.pagination-jq .current.next {
+    color: #999;
+    border-color: #999;
+    background: #fff;
+}

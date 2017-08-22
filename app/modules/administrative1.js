@@ -11,15 +11,9 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
     Widget.prototype = {
         _init: function() {
             var _self = this;
-            _self.searchCache = {
-                q: "",
-                num: 15, //itemPerPage
-                start: 1,
-            };
             // if (_self.options.isLogin == true) {
             //   _self._getAuthorInfo();
             // }
-            _self._search();
             _self._setDefaultOptions();
             _self._setMainContentHeight();
             _self._switching();
@@ -53,29 +47,6 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
         _setDefaultOptions: function() {
             var _self = this;
             _self.common.fixExtention();
-        },
-        _search: function() {
-            var _self = this;
-            $('#searchButton').on('click', function() {
-                var queryStr = $('#searchBox').val().trim();
-                $('.tfooter').addClass('loading-light');
-                _self.ajaxUtil.search(_self.options.OprUrls.zoningInfo.searchUrl, "engine.projectName like '%" + queryStr + "%'", _self.searchCache.start, _self.searchCache.num, function(respons) {
-                    if (respons.results) {
-                        _self.datas = respons.results;
-                        _self.viewModuls = _self.datas;
-                        _self._constructTable();
-                        _self._constructBdMap();
-                        var currentPage = Math.ceil(_self.searchCache.start / _self.searchCache.num) - 1;
-                        _self._renderPagination("#pagination", currentPage, respons.totalRecords, _self.searchCache.num, function(pageIndex) {
-                            _self.searchCache.start = pageIndex * _self.searchCache.num + 1;
-                            _self._requestDatas();
-
-                        });
-                        $('.tfooter').removeClass('loading-light');
-                    }
-                }, 'cb49c793-2572-4687-8347-7a14e97c0848');
-                // }
-            });
         },
         _constructBdMap: function(isheatmap) {
             var _self = this;
@@ -187,35 +158,17 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
         _requestDatas: function() {
             var _self = this;
             $('.tfooter').addClass('loading-light');
-            _self.ajaxUtil.search(_self.options.OprUrls.zoningInfo.searchUrl, 'engine=null', _self.searchCache.start, _self.searchCache.num, function(respons) {
-                if (respons.results) {
-                    _self.datas = respons.results;
+            _self.ajaxUtil.query(_self.options.OprUrls.zoningInfo.queryUrl, 'engine=null', function(respons) {
+                if (respons.result) {
+                    _self.datas = respons.list;
                     _self.viewModuls = _self.datas;
                     _self._constructTable();
                     _self._constructBdMap();
-                    var currentPage = Math.ceil(_self.searchCache.start / _self.searchCache.num) - 1;
-                    _self._renderPagination("#pagination", currentPage, respons.totalRecords, _self.searchCache.num, function(pageIndex) {
-                        _self.searchCache.start = pageIndex * _self.searchCache.num + 1;
-                        _self._requestDatas();
-
-                    });
-                    // $('.footable-res').footable();
+                    $('.footable-res').footable();
                     // _self._constructTypeaHead();
                     $('.tfooter').removeClass('loading-light');
                 }
             }, 'cb49c793-2572-4687-8347-7a14e97c0848');
-        },
-        _renderPagination: function(id, pageIndex, total, itemPerPage, callback) {
-            //分页控件初始化
-            $(id).pagination(total, {
-                'items_per_page': itemPerPage,
-                'current_page': pageIndex, //默认0，第一页
-                'num_display_entries': 5,
-                'num_edge_entries': 1,
-                'prev_text': "上一页",
-                'next_text': "下一页",
-                'callback': callback
-            });
         },
         _constructTable: function() {
             var _self = this;
@@ -313,7 +266,7 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
                 thtml += '<a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span></a>';
                 $('#carousel-example-generic').html(thtml);
                 $('#dlgThumb').modal('show');
-                $('.carousel .item').css('height', '300px');
+                $('.carousel .item').css('height', document.body.clientHeight - 120);
                 $('.carousel .item').on('dblclick', function(e) {
                     $('#dlgThumb').modal('hide');
                 });

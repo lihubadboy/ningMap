@@ -1,4 +1,4 @@
-define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/SeismogramUtil'], function(ajaxUtil, common, SeismogramUtil) {
+﻿define('modules/engineer', ['utils/ajaxUtil', 'utils/common', 'utils/SeismogramUtil'], function(ajaxUtil, common, SeismogramUtil) {
     var Widget = function(options) {
         var _self = this;
         _self.options = options;
@@ -16,18 +16,21 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
                 num: 15, //itemPerPage
                 start: 1,
             };
-            // if (_self.options.isLogin == true) {
-            //   _self._getAuthorInfo();
-            // }
-            _self._search();
+            if (_self.options.isLogin == true) {
+                _self._getAuthorInfo();
+            }
             _self._setDefaultOptions();
-            _self._setMainContentHeight();
+            // _self._setMainContentHeight();
             _self._switching();
             _self._requestDatas();
+            _self._search();
             _self._dialog();
             _self._delete();
             _self._refresh();
+            _self._export();
             _self._logout();
+            // _self._initDatePickUp('#backUpTime');
+            // _self._initDatePickUp('#permitTime');
         },
         _getAuthorInfo: function() {
             var _self = this;
@@ -36,23 +39,12 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
                 window.location.href = "login.html";
             } else {
                 _self.options.authorInfo = $.parseJSON(cookies);
-                $(".dropdown-toggle").html('<img alt="logo" src="images/user.png"> 欢迎，' + _self.options.authorInfo.username + ' <i class="icon-chevron-down"></i>');
+                $(".dropdown-toggle").html(' <img alt="" class="admin-pic img-circle" src="images/user.png"> 欢迎，' + _self.options.authorInfo.username + '  <b class="caret"></b>');
                 if (_self.options.authorInfo.localBureau != '中国地震局地球物理研究所') {
                     $('#usermanager').css('display', 'none');
                     $('#statics').css('display', 'none');
                 }
             }
-        },
-        _logout: function() {
-            var _self = this;
-            $("#logout").on("click", function() {
-                _self.common.deleteCookie(_self.options.authorInfoKey, "/");
-                window.location.href = "login.html";
-            });
-        },
-        _setDefaultOptions: function() {
-            var _self = this;
-            _self.common.fixExtention();
         },
         _search: function() {
             var _self = this;
@@ -77,6 +69,17 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
                 // }
             });
         },
+        _logout: function() {
+            var _self = this;
+            $("#logout").on("click", function() {
+                _self.common.deleteCookie(_self.options.authorInfoKey, "/");
+                window.location.href = "login.html";
+            });
+        },
+        _setDefaultOptions: function() {
+            var _self = this;
+            _self.common.fixExtention();
+        },
         _constructBdMap: function(isheatmap) {
             var _self = this;
             if (!_self.map) {
@@ -89,7 +92,10 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
                 _self.map.addControl(new BMap.ScaleControl()); // 添加比例尺控件
                 _self.map.addControl(new BMap.OverviewMapControl()); //添加缩略地图控件
                 _self.map.enableScrollWheelZoom(); //启用滚轮放大缩小
-                _self.map.addControl(new BMap.MapTypeControl({ type: BMAP_MAPTYPE_CONTROL_MAP })); //添加地图类型控件
+                _self.map.addControl(new BMap.MapTypeControl({
+                    type: BMAP_MAPTYPE_CONTROL_MAP
+                })); //添加地图类型控件
+                _self.options.showBound && _self._getBoundary();
             }
             if (_self.viewModuls) {
                 _self.map.closeInfoWindow();
@@ -127,6 +133,24 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
             }
             $('.page-loading-overlay').hide();
         },
+        _getBoundary: function() {
+            var _self = this;
+            var bdary = new BMap.Boundary();
+            bdary.get(_self.options.city, function(rs) {
+                var count = rs.boundaries.length;
+                for (var i = 0; i < count; i++) {
+                    var ply = new BMap.Polygon(rs.boundaries[i], {
+                        fillColor: "",
+                        strokeWeight: 4,
+                        strokeColor: "#ff0000",
+                        strokeStyle: "solid",
+                        enableMassClear: false,
+                        enableClicking: false
+                    });
+                    _self.map.addOverlay(ply);
+                }
+            });
+        },
         _addClickHandler: function(content, marker) {
             var _self = this;
             marker.addEventListener("click", function(e) {
@@ -154,7 +178,7 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
                 opts.title = '行政区划点';
                 sContent =
                     '<div style="margin:0;line-height:20px;padding:2px;">' +
-                    "所属省：" + content.administRegion.province + "<br/>所属市：" + content.administRegion.city + "<br/>所属区/县：" + content.administRegion.county + "<br/>采集员：" + content.administRegion.claimsman + "<br/>Tg：" + content.tg + "<br/>PGA：" + content.pga +
+                    "所属省：" + content.administRegion.province + "<br/>所属市：" + content.administRegion.city + "<br/>所属区/县：" + content.administRegion.county + "<br/>采集员：" + content.administRegion.claimsman + "<br/>Tg：" + parseFloat(content.tg).toFixed(2) + "<br/>PGA：" + parseFloat(content.pga).toFixed(2) +
                     "<br/>地址：" + content.administRegion.address + "</div>";
             } else {
                 opts.title = '工程场点';
@@ -175,7 +199,10 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
                 _self.detialMap.setMapStyle({
                     style: _self.options.city.style
                 });
-                _self.detialMap.addControl(new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_SMALL }));
+                _self.detialMap.addControl(new BMap.NavigationControl({
+                    anchor: BMAP_ANCHOR_TOP_LEFT,
+                    type: BMAP_NAVIGATION_CONTROL_SMALL
+                }));
             }
             _self.selectMarker && _self.detialMap.removeOverlay(_self.selectMarker);
             var point = new BMap.Point(data.longitude, data.latitude);
@@ -186,8 +213,9 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
         },
         _requestDatas: function() {
             var _self = this;
+            // $('#table-container').empty();
             $('.tfooter').addClass('loading-light');
-            _self.ajaxUtil.search(_self.options.OprUrls.zoningInfo.searchUrl, 'engine=null', _self.searchCache.start, _self.searchCache.num, function(respons) {
+            _self.ajaxUtil.search(_self.options.OprUrls.zoningInfo.searchUrl, 'administRegion=null', _self.searchCache.start, _self.searchCache.num, function(respons) {
                 if (respons.results) {
                     _self.datas = respons.results;
                     _self.viewModuls = _self.datas;
@@ -199,8 +227,6 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
                         _self._requestDatas();
 
                     });
-                    // $('.footable-res').footable();
-                    // _self._constructTypeaHead();
                     $('.tfooter').removeClass('loading-light');
                 }
             }, 'cb49c793-2572-4687-8347-7a14e97c0848');
@@ -223,16 +249,17 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
             $.each(_self.viewModuls, function(key, val) {
                 html += '<tr index="' + key + '">';
                 html += '<td style="width:5%;"><input type="checkbox"></td>';
-                html += '<td style="width:25%;">' + val.administRegion.address + '</td>';
-                html += '<td style="width:20%;">' + val.administRegion.claimsman + '</td>';
+                html += '<td style="width:25%;">' + val.engine.projectName + '</td>';
+                html += '<td style="width:20%;">' + val.engine.claimsman + '</td>';
                 html += '<td style="width:10%;">' + val.longitude + '</td>';
                 html += '<td style="width:10%;">' + val.latitude + '</td>';
-                html += '<td style="width:10%;"><strong>' + val.tg + '</strong></td>';
-                html += '<td style="width:10%;"><strong>' + val.pga + '<strong></td>';
+                html += '<td style="width:10%;"><strong>' + parseFloat(val.tg).toFixed(2) + '</strong></td>';
+                html += '<td style="width:10%;"><strong>' + parseFloat(val.pga).toFixed(2) + '<strong></td>';
                 html += '<td style="width:10%;">' + (new Date(val.createTime)).Format('yyyy年MM月dd日') + '</td>';
                 html += '</tr>';
             });
             $('.tableContent').html(html);
+            // $('.footable-res').footable();
             $('#chkAll').attr('checked', false);
 
             //handel events
@@ -263,14 +290,16 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
         _constructDetialInfo: function(data) {
             var _self = this;
             var html = '';
-            $('.projectTitle').html(data.administRegion.address);
+            $('.projectTitle').html(data.engine.projectName);
 
-            html += _self._constructInfoPanel_6('省', data.administRegion.province, 1);
-            html += _self._constructInfoPanel_6('市', data.administRegion.city, 0);
-            html += _self._constructInfoPanel_6('区/县', data.administRegion.county, 1);
-            html += _self._constructInfoPanel_6('镇', data.administRegion.town, 0);
-            html += _self._constructInfoPanel_6('村', data.administRegion.village, 1);
-            html += _self._constructInfoPanel_6('调查员', data.administRegion.claimsman, 0);
+            html += _self._constructInfoPanel_6('设计单位', data.engine.designOrg, 1);
+            html += _self._constructInfoPanel_6('施工单位', data.engine.constructOrg, 0);
+            html += _self._constructInfoPanel_6('调查员', data.engine.claimsman, 1);
+            html += _self._constructInfoPanel_6('场地类型', data.engine.type, 0);
+            html += _self._constructInfoPanel_6('开建时间', data.engine.startDate ? (new Date(data.engine.startDate)).Format('yyyy年MM月dd日') : '未知', 1);
+            html += _self._constructInfoPanel_6('建成时间', data.engine.endDate ? (new Date(data.engine.endDate)).Format('yyyy年MM月dd日') : '未知', 0);
+            html += _self._constructInfoPanel_12('工程地址', data.engine.address, 1);
+            html += _self._constructInfoPanel_12('项目简介', data.engine.description, 1);
 
             $('#detial-info').html(html);
 
@@ -284,11 +313,11 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
             var _self = this;
             var html = '';
             html += '<p class="sub-title">附件信息</p>';
-            if (data.administRegion.attachments == null || data.administRegion.attachments.length == 0) {
+            if (data.engine.attachments == null || data.engine.attachments.length == 0) {
                 html += '<p class="text-muted text-center">未上传附件信息</p>';
             } else {
                 html += '<div class="row">';
-                $.each(data.administRegion.attachments, function(key, val) {
+                $.each(data.engine.attachments, function(key, val) {
                     html += '<div class="col-xs-6 col-md-3">';
                     html += '<a href="#" class="thumbnail" role="button">';
                     html += '<img src="' + _self.options.thumbnailBaseUrl + val.url + '">';
@@ -304,7 +333,7 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
                 var thtml = '';
                 thtml += '<div class="carousel-inner" role="listbox">';
                 thtml += '<div class="item active" style="background: url(' + selectUrl + ') no-repeat center center;background-size:contain;"></div>';
-                $.each(_self.selectData.administRegion.attachments, function(key, val) {
+                $.each(_self.selectData.engine.attachments, function(key, val) {
                     if (selectUrl.indexOf(val.url) < 0)
                         thtml += '<div class="item" style="background: url(' + _self.options.thumbnailBaseUrl + val.url + ') no-repeat center center;background-size:contain;"></div>';
                 });
@@ -355,6 +384,62 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
             $('.peakTable1').html(html);
             return peakdata;
         },
+        _constructExportTable: function() {
+            var _self = this;
+            var selectNodes = $('#admTable').find('input:checked');
+            var html = '<table id="export-table">';
+            html += '<thead>';
+            html += '<tr>';
+            html += '<th>序号</th>';
+            html += '<th>工程名称</th>';
+            html += '<th>调查员</th>';
+            html += '<th>经度</th>';
+            html += '<th>纬度</th>';
+            html += '<th>Tg</th>';
+            html += '<th>PGA</th>';
+            html += '<th>调查时间</th>';
+            html += '<th>设计单位</th>';
+            html += '<th>施工单位</th>';
+            html += '<th>开建时间</th>';
+            html += '<th>建成时间</th>';
+            html += '<th>工程地址</th>';
+            html += '<th>项目简介</th>';
+            html += '<th>附件</th>';
+            html += '</tr>';
+            html += '</thead>';
+            html += '<tbody>';
+            var i = 1;
+            $.each(selectNodes, function(key, val) {
+                var data = _self.viewModuls[parseInt($(this).parent().parent('tr').attr('index'))];
+                html += '<tr>';
+                html += '<td>' + (i++) + '</td>';
+                html += '<td>' + data.engine.projectName + '</td>';
+                html += '<td>' + data.engine.claimsman + '</td>';
+                html += '<td>' + data.longitude + '</td>';
+                html += '<td>' + data.latitude + '</td>';
+                html += '<td>' + data.tg + '</td>';
+                html += '<td>' + data.pga + '</td>';
+                html += '<td>' + (new Date(data.createTime)).Format('yyyy年MM月dd日') + '</td>';
+                html += '<td>' + data.engine.designOrg + '</td>';
+                html += '<td>' + data.engine.constructOrg + '</td>';
+                html += '<td>' + (new Date(data.engine.startDate)).Format('yyyy年MM月dd日') + '</td>';
+                html += '<td>' + (new Date(data.engine.endDate)).Format('yyyy年MM月dd日') + '</td>';
+                html += '<td>' + data.engine.address + '</td>';
+                html += '<td>' + data.engine.description + '</td>';
+                //attachments
+                html += '<td>';
+                if (data.engine.attachments && data.engine.attachments.length > 0) {
+                    $.each(data.engine.attachments, function(i, attachment) {
+                        html += _self.options.thumbnailBaseUrl + attachment.url + ' ';
+                    });
+                } else html += '';
+                html += '</td>';
+            });
+            html += '</tbody>';
+            html += '</table>';
+
+            $('#exportContainer').html(html);
+        },
         _constructPHeightTable: function(peakData) {
             var phdata;
             var _self = this;
@@ -370,6 +455,7 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
                 html += '<td>' + val[4] + '</td>';
                 html += '</tr>';
             });
+
             $('.peakTable2').html(html);
             return phdata;
         },
@@ -386,107 +472,6 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
             html += '<p class="high-light">' + header + '<strong class="pull-right">' + content + '</strong></p>';
             html += '</div>';
             return html;
-        },
-        _constructTypeaHead: function() {
-            var _self = this;
-            //get typeahead source
-            var source = _self._getTypeaheadSource();
-            var admin_adrs = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('adminAdr'),
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                local: $.map(source.adminadrs, function(data) {
-                    return {
-                        adminAdr: data
-                    };
-                })
-            });
-            admin_adrs.initialize();
-            $('#searchDiv .typeahead').typeahead({
-                highlight: true,
-                hint: false
-            }, {
-                name: 'admin_adrs',
-                displayKey: 'adminAdr',
-                source: admin_adrs.ttAdapter(),
-                templates: {
-                    empty: [
-                        '<p class="empty-message muted">',
-                        '未能找到匹配的项',
-                        '</p>'
-                    ].join('\n')
-                }
-            });
-            $('#searchDiv .typeahead').on('typeahead:selected', function(args, data, name) {
-                _self.viewModuls = _self.datas;
-                if (data != null && name != null) {
-                    if (name == 'admin_adrs') {
-                        _self.viewModuls = $.grep(_self.viewModuls, function(val, key) {
-                            return val.administRegion.address.indexOf(data.adminAdr) > -1;
-                        });
-                    }
-                    _self._raiseMessage('共找到<strong>' + _self.viewModuls.length + '</strong>条记录.');
-                    _self._hideDetialPanel();
-                    _self.resize();
-                    _self._constructTable();
-                }
-            });
-            $('#searchDiv .typeahead').on('keyup', function(event) {
-                if ((event.keyCode == 8 || event.keyCode == 46 || event.keyCode == 32) && $('#searchDiv .typeahead').val().trim() == '') {
-                    _self.viewModuls = _self.datas;
-                    _self._hideDetialPanel();
-                    _self.resize();
-                    _self._constructTable();
-                }
-            });
-            $('#searchDiv .typeahead').on('keydown', function(event) {
-                if (event.keyCode == 13 && $('#searchDiv .typeahead').val().trim() != '') {
-                    if ($('#searchDiv .typeahead').val().trim() == '') return;
-                    $('#searchDiv .typeahead').blur();
-                    var searchVal = $('#searchDiv .typeahead').val().trim();
-                    _self.viewModuls = $.grep(_self.datas, function(val, key) {
-                        return (val.administRegion.address.indexOf(searchVal) > -1);
-                    });
-                    _self._raiseMessage('共找到<strong>' + _self.viewModuls.length + '</strong>条记录.');
-                    _self._hideDetialPanel();
-                    _self.resize();
-                    _self._constructTable();
-                    return false;
-                }
-            });
-            //set menu width
-            $('.tt-dropdown-menu').css('width', $('#searchBox').innerWidth());
-
-            // window resize
-            $(window.app).on('resize', function() {
-                if ($('.tt-dropdown-menu').length > 0)
-                    $('.tt-dropdown-menu').css('width', $('#searchBox').innerWidth());
-            });
-        },
-        _getTypeaheadSource: function() {
-            var _self = this;
-            var result = {
-                adminadrs: []
-            };
-            if (_self.datas == null) return result;
-            $.each(_self.datas, function(index, val) {
-                if ($.inArray(val.administRegion.address, result.adminadrs) == -1)
-                    result.adminadrs.push(val.administRegion.address);
-            });
-            return result;
-        },
-        _initTableScrollBar: function(id, position) {
-            $.mCustomScrollbar.defaults.theme = "dark";
-            $(id).mCustomScrollbar({
-                scrollbarPosition: position == null ? 'inside' : position,
-                autoHideScrollbar: true
-            });
-            $(id).mCustomScrollbar('update');
-        },
-        _updateTableScrollBar: function(id) {
-            $(id).mCustomScrollbar('update');
-        },
-        _destroyTableScrollBar: function(id) {
-            $(id).mCustomScrollbar('destroy');
         },
         _getParmeterAlias: function(index) {
             switch (index) {
@@ -530,7 +515,7 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
             var _self = this;
             $('.title-alt').hide();
             $('.departmentlist').hide();
-            $('#contentDetail').show();;
+            $('#contentDetail').show();
         },
         _hideDetialPanel: function() {
             var _self = this;
@@ -571,7 +556,88 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
         },
         _dialog: function() {
             var _self = this;
+            $('#btnExport').on('click', function(e) {
+                $('#num').val((new Date()).Format('yyyyMMddhhmmss'));
+                $('#projectName').val(_self.selectData.engine.projectName);
+                $('#backUpTime').val((new Date()).Format('yyyy年MM月dd日'));
+                $('#constructOrg').val(_self.selectData.engine.constructOrg);
+                $('#frdb').val('');
+                $('#lxr').val('');
+                $('#email').val('');
+                $('#telephone').val('');
+                $('#constructAdd').val('');
+                $('#address').val(_self.selectData.engine.address);
+                $('#permitTime').val(_self.selectData.engine.permitsDate ? (new Date(_self.selectData.engine.permitsDate)).Format('yyyy年MM月dd日') : (new Date()).Format('yyyy年MM月dd日'));
+                $('#tg').val(_self.selectData.engine.tg);
+                $('#epa').val(_self.selectData.engine.epa);
+                $('#longitude').val(_self.selectData.longitude);
+                $('#latitude').val(_self.selectData.latitude);
+                $('#floorSpace').val(_self.selectData.engine.floorSpace);
+                $('#floorArea').val(_self.selectData.engine.floorArea);
+                $('#buildingStorey').val(_self.selectData.engine.buildingStorey);
+                $('#maxBuildingHeight').val(_self.selectData.engine.maxBuildingHeight);
+                $('#projectSize').val(_self.selectData.engine.projectSize);
+                $('#structureType').val(_self.selectData.engine.structureType);
+                $('#projectUsage').val(_self.selectData.engine.projectUsage);
+                $('#investment').val(_self.selectData.engine.investment);
+                $('#classification').val(_self.selectData.engine.classification);
+                $('#siteCategory').val(_self.selectData.engine.type);
+                $('#dlgExport').modal({
+                    backdrop: 'static'
+                });
+            });
+            $('#btn-export').on('click', function() {
+                var content = {
+                    "num": $('#num').val(),
+                    "createTime": $('#backUpTime').val(),
+                    "projectName": $('#projectName').val(),
+                    "company": $('#constructOrg').val(),
+                    "companyAddress": $('#constructAdd').val(),
+                    "frdb": $('#frdb').val(),
+                    "contact": $('#lxr').val(),
+                    "email": $('#email').val(),
+                    "phone": $('#telephone').val(),
+                    "lon": $('#longitude').val(),
+                    "lat": $('#latitude').val(),
+                    "floorSpace": $('#floorSpace').val(),
+                    "floorArea": $('#floorArea').val(),
+                    "buildingStorey": $('#buildingStorey').val(),
+                    "maxBuildingHeight": $('#maxBuildingHeight').val(),
+                    "projectSize": $('#projectSize').val(),
+                    "structureType": $('#structureType').val(),
+                    "projectUsage": $('#projectUsage').val(),
+                    "investment": $('#investment').val(),
+                    "classification": $('#classification').val(),
+                    "permitsDate": $('#permitTime').val(),
+                    "projectAddress": $('#address').val(),
+                    "type": $('#siteCategory').val(),
+                    "tg": parseFloat($('#tg').val()),
+                    "epg": parseFloat($('#epa').val()),
+                    "gB_Tg": _self.selectData.tg,
+                    "gB_Epa": _self.selectData.pga
+                };
 
+                _self.ajaxUtil.export(_self.options.OprUrls.word.creatUrl, content, function(respons) {
+                    if (respons.result) {
+                        window.open(_self.options.thumbnailBaseUrl + respons.data);
+                    }
+                    $('#dlgExport').modal('hide');
+                });
+            });
+        },
+        _export: function() {
+            var _self = this;
+            $('#btnExportTable').on('click', function(e) {
+                $('#dlgDelete .modal-title').html('导出');
+                if ($('#admTable input:checked').length == 0) {
+                    $('#deleteContent').html('<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> 请先选择要导出的数据！');
+                    $('#dlgDelete .modal-footer').css('display', 'none');
+                    $('#dlgDelete').modal('show');
+                    return;
+                }
+                _self._constructExportTable();
+                tableExport('export-table', '工程建设类-' + (new Date()).Format('yyyyMMddhhmmss'), 'csv');
+            });
         },
         _delete: function() {
             var _self = this;
@@ -611,7 +677,6 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
                         if (respons.result) {
                             $('#deleteContent').html('<span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span> 删除数据成功！');
                             _self._hideDetialPanel();
-                            _self.resize();
                             _self._requestDatas();
                         } else {
                             $('#deleteContent').html('<span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> 删除数据失败！');
@@ -644,6 +709,21 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
                 _self._hideDetialPanel();
                 _self.resize();
                 _self._requestDatas();
+            });
+        },
+        _initDatePickUp: function(id, container, minView) {
+            $(id).datetimepicker({
+                language: 'zh-CN',
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0,
+                showMeridian: 1,
+                format: 'yyyy年mm月dd日',
+                container: container
             });
         },
         _raiseMessage: function(msg) {
