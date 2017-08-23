@@ -202,7 +202,7 @@
                     name: '访问量',
                     type: 'line',
                     center: [120, 80],
-                    data: [1123, 1145, 1534, 1314, 1246, 1378, 1098],
+                    data: [3, 7, 10, 13, 7, 14, 16],
                     markPoint: {
                         data: [
                             { type: 'max', name: '最大值' },

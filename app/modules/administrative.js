@@ -59,7 +59,7 @@ define('modules/administrative', ['utils/ajaxUtil', 'utils/common', 'utils/Seism
             $('#searchButton').on('click', function() {
                 var queryStr = $('#searchBox').val().trim();
                 $('.tfooter').addClass('loading-light');
-                _self.ajaxUtil.search(_self.options.OprUrls.zoningInfo.searchUrl, "engine.projectName like '%" + queryStr + "%'", _self.searchCache.start, _self.searchCache.num, function(respons) {
+                _self.ajaxUtil.search(_self.options.OprUrls.zoningInfo.searchUrl, "administRegion.address like '%" + queryStr + "%'", _self.searchCache.start, _self.searchCache.num, function(respons) {
                     if (respons.results) {
                         _self.datas = respons.results;
                         _self.viewModuls = _self.datas;
