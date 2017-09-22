@@ -43,15 +43,15 @@ body {
 #logo-login {
     background: rgba(48, 65, 96, 0.8);
     color: #FFFFFF;
-    padding: 1px 0 14px 25px;
+    padding: 14px 25px;
     ;
 }
 
-#logo-login h1 {
+#logo-login h2 {
     color: #FFFFFF;
-    font-size: 30px;
+    font-size: 22px;
     font-weight: 200;
-    letter-spacing: 10px;
+    letter-spacing: 0px;
     text-decoration: inherit;
     text-transform: uppercase;
 }
@@ -103,8 +103,16 @@ body {
 .login-footer {
     text-align: center;
     margin: 0 auto;
+    position: fixed;
+    bottom: 10px;
+    width: 100%;
 }
-
+#login-wrapper .carousel-indicators li {
+    border-color: rgba(48, 65, 96, 1);
+}
+#login-wrapper .carousel-indicators .active {
+    background-color: rgba(48, 65, 96, 1);
+}
 .login-footer a {
     text-decoration: none;
     color: #fff;
@@ -214,9 +222,12 @@ input {
     font-size: 13px !important;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     background-color: #ffffff;
-    padding: 20px;
+    padding: 44px 20px;
 }
 
+.account-box .form-group {
+    margin-bottom: 25px;
+}
 .logo {
     width: 138px;
     height: 30px;

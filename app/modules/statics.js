@@ -14,9 +14,9 @@
     Widget.prototype = {
         _init: function() {
             var _self = this;
-            // if (_self.options.isLogin == true) {
-            //   _self._getAuthorInfo();
-            // }
+            if (_self.options.isLogin == true) {
+              _self._getAuthorInfo();
+            }
             _self._setDefaultOptions();
             _self._requestStaticsDatas();
             // _self._setMainContentHeight();
@@ -97,32 +97,28 @@
         _requireStaticDatas: function(id) {
             var _self = this;
             $('.left').addClass('loading-light');
-            _self.ajaxUtil.query(_self.options.OprUrls.calculator.queryUrl, '1=1', function(respons) {
+            _self.ajaxUtil.query(_self.options.OprUrls.calculator.querySimpleUrl, '1=1', function(respons) {
                 if (respons.result) {
-                    _self.staticdatas = respons.list;
-                    _self.points = [], _self.markers = [], _self.hpoints = [];
-                    $.each(_self.staticdatas, function(k1, v1) {
-                        _self.points.push({
-                            name: (new Date(v1.createTime)).Format('yyyy年MM月dd日'),
-                            value: [v1.longitude, v1.latitude, v1.tg, v1.pga]
-                        });
-                        _self.hpoints.push({ "lng": v1.longitude, "lat": v1.latitude, "count": v1.pga });
-                        if (v1.longitude == null || v1.latitude == null) {
-                            console.log(v1.longitude);
-                        }
-                        _self.markers.push(new BMap.Marker(new BMap.Point(v1.longitude, v1.latitude)));
+                  _self.staticdatas = respons.list;
+                  _self.points = [], _self.markers = [], _self.hpoints=[];
+                  $.each(_self.staticdatas, function(k1, v1) {
+                    _self.points.push({
+                      name: (v1[0] ? v1[0] : '公众版') + ' - ' + (new Date(v1[5])).Format('yyyy年MM月dd日'),
+                      value: [v1[1], v1[2], v1[3], v1[4]]
                     });
-                    if (id == 'pointmap')
-                        _self._constructPointVisualMap(_self.points, 'mapDiv');
-                    else if (id == 'heatmap')
-                        _self._constructPointHeatMap(_self.hpoints, 'mapDiv');
-                    else if (id == 'staticmap')
-                        _self._constructClusterMap(_self.markers, 'mapDiv');
+                    _self.hpoints.push({"lng":v1[1],"lat":v1[2],"count":v1[3]});
+                    _self.markers.push(new BMap.Marker(new BMap.Point(v1[1], v1[2])));
+                  });
+                  if(id == 'pointmap')
+                    _self._constructPointVisualMap(_self.points, 'mapDiv');
+                  else if(id == 'heatmap')
+                    _self._constructPointHeatMap(_self.hpoints, 'mapDiv');
+                  else if(id == 'staticmap')
+                    _self._constructClusterMap(_self.markers, 'mapDiv');
                 } else {
-                    _self._raiseMessage('获取用量数失败！');
+                  _self._raiseMessage('获取用量数失败！');
                 }
-                $('.left').removeClass('loading-light');
-            }, 'cb49c793-2572-4687-8347-7a14e97c0848');
+            }, _self.options.authorInfo.userid);
         },
         _constructPointVisualMap: function(datas, domID) {
             var _self = this;
@@ -246,40 +242,45 @@
                     }
                 },
                 tooltip: {
-                    trigger: 'item'
+                  trigger: 'item',
+                  formatter: function (params, ticket, callback) {
+                    return params.name + '<br />' + '地震动峰值加速度：' + params.value[2] + '<br />' + '地震动反应谱特征周期：' + params.value[3];
+                  }
                 },
                 legend: {
-                    orient: 'vertical',
-                    y: 'bottom',
-                    x: 'right',
-                    data: ['区划点'],
-                    textStyle: {
-                        color: '#fff'
+                  show: false
+                },
+                visualMap: {
+                    show: false,
+                    splitNumber: 5,
+                    min: 0,
+                    max: 0.5,
+                    seriesIndex: 0,
+                    showLabel: false,
+                    calculable: true,
+                    inRange: {
+                        color: ['green', '#eac736', '#d94e5d']
                     }
+
                 },
                 series: [{
-                    name: '区划点',
-                    type: 'scatter',
-                    data: datas,
-                    coordinateSystem: 'bmap',
-                    symbolSize: function(val) {
-                        return (val[2] + val[3]) * 5;
+                  name: '区划点',
+                  type: 'scatter',
+                  data: datas,
+                  coordinateSystem: 'bmap',
+                  symbolSize: function(val) {
+                    return (val[2] + val[3]) * 5;
+                  },
+                  label: {
+                    normal: {
+                      formatter: '{b}',
+                      position: 'right',
+                      show: false
                     },
-                    label: {
-                        normal: {
-                            formatter: '{b}',
-                            position: 'right',
-                            show: false
-                        },
-                        emphasis: {
-                            show: true
-                        }
-                    },
-                    itemStyle: {
-                        normal: {
-                            color: '#a6c84c'
-                        }
+                    emphasis: {
+                      show: true
                     }
+                  }
                 }]
             };
             myChart.setOption(option);

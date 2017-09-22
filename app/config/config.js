@@ -35,6 +35,7 @@ var configOptions = {
         },
         "calculator": {
             "queryUrl": baseOprUrl + "/calculator/query",
+            "querySimpleUrl": baseOprUrl + "/calculator/querySimplify",
             "staticUrl": baseOprUrl + "/calculator/statisticsBureau"
         },
         "word": {
