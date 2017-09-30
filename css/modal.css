@@ -22,3 +22,21 @@
 #deleteContent {
     font-size: 16px;
 }
+
+#dlgThumb .modal-dialog {
+    width: auto !important;
+}
+
+#dlgThumb .modal-content {
+    background: transparent;
+    border-color: transparent;
+}
+
+#dlgThumb .modal-header {
+    border: 0 !important;
+}
+
+#dlgThumb .carousel-control.left,
+#dlgThumb .carousel-control.right {
+    background: transparent;
+}
