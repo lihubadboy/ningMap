@@ -342,7 +342,7 @@
                 thtml += '<a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span></a>';
                 $('#carousel-example-generic').html(thtml);
                 $('#dlgThumb').modal('show');
-                $('.carousel .item').css('height', '300px');
+                $('.carousel .item').css('height', window.screen.availHeight - 220);
                 $('.carousel .item').on('dblclick', function(e) {
                     $('#dlgThumb').modal('hide');
                 });
@@ -582,6 +582,9 @@
                 $('#investment').val(_self.selectData.engine.investment);
                 $('#classification').val(_self.selectData.engine.classification);
                 $('#siteCategory').val(_self.selectData.engine.type);
+                $("#dlgExport").mCustomScrollbar({
+                    theme: "minimal-dark"
+                });
                 $('#dlgExport').modal({
                     backdrop: 'static'
                 });
